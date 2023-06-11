@@ -15,26 +15,22 @@ import javax.swing.JPanel;
  */
 public class panelPrincipal extends javax.swing.JPanel {
     
-    private JPanel centro;
-    private JPanel derecha;
-    private JPanel izquiera;
-    private JPanel arriba;
-    private JPanel abajo;
+    private EntradaSalida centro;
+    private Botones arriba;
+    private Abajo abajo;
 
     /**
      * Creates new form panelPrincipal
      */
     public panelPrincipal() {
-        centro = new JPanel();
-        derecha = new JPanel();
-        izquiera = new JPanel();
-        arriba = new JPanel();
-        abajo = new JPanel();
-        derecha.setLayout(new CardLayout());
-        izquiera.setLayout(new CardLayout());
-        centro.setLayout(new CardLayout());
-        arriba.setLayout(new CardLayout());
-        abajo.setLayout(new CardLayout());
+        centro = new EntradaSalida(this);
+        arriba = new Botones(this);
+        abajo = new Abajo();
+//        derecha.setLayout(new CardLayout());
+//        izquiera.setLayout(new CardLayout());
+//        centro.setLayout(new CardLayout());
+//        arriba.setLayout(new CardLayout());
+//        abajo.setLayout(new CardLayout());
         initComponents();
         this.setLayout(new BorderLayout());
         agregarBotones();
@@ -53,22 +49,45 @@ public class panelPrincipal extends javax.swing.JPanel {
         setLayout(new java.awt.BorderLayout());
     }// </editor-fold>//GEN-END:initComponents
     public void agregarBotones(){
-        TextoEntrada editor = new TextoEntrada();
-        centro.add(editor);
-        Botones botones = new Botones();
-        arriba.add(botones);
+        //EntradaSalida paso = new EntradaSalida();
+       // Botones botones = new Botones();
+        //Abajo abajoa = new Abajo();
+        //abajo.add(abajoa);
+        //arriba.add(botones);
+        //centro.add(paso);
+        
         agregar();
   
     }
-    
 
-    public JPanel getCentro() {
+    public EntradaSalida getCentro() {
         return centro;
     }
+
+    public void setCentro(EntradaSalida centro) {
+        this.centro = centro;
+    }
+
+    public Botones getArriba() {
+        return arriba;
+    }
+
+    public void setArriba(Botones arriba) {
+        this.arriba = arriba;
+    }
+
+    public Abajo getAbajo() {
+        return abajo;
+    }
+
+    public void setAbajo(Abajo abajo) {
+        this.abajo = abajo;
+    }
+    
  public void agregar() {
         this.add(centro, BorderLayout.CENTER);
-        this.add(derecha, BorderLayout.EAST);
-        this.add(izquiera, BorderLayout.WEST);
+        //this.add(derecha, BorderLayout.EAST);
+        //this.add(izquiera, BorderLayout.WEST);
         this.add(arriba, BorderLayout.NORTH);
         this.add(abajo, BorderLayout.SOUTH);
         this.setVisible(false);
@@ -77,45 +96,16 @@ public class panelPrincipal extends javax.swing.JPanel {
     public void setCentro(JPanel centro) {
         this.setVisible(false);
         this.centro.setVisible(false);
-        this.centro = new JPanel();
+        //this.centro = new JPanel();
         this.centro.setLayout(new CardLayout());
         this.centro.add(centro);
         this.centro.setVisible(true);
         agregar();
     }
-
-    public JPanel getDerecha() {
-        return derecha;
-    }
-
-    public void setDerecha(JPanel derecha) {
-        this.derecha = derecha;
-    }
-
-    public JPanel getIzquiera() {
-        return izquiera;
-    }
-
-    public void setIzquiera(JPanel izquiera) {
-        this.izquiera = izquiera;
-    }
-
-    public JPanel getArriba() {
-        return arriba;
-    }
-
-    public void setArriba(JPanel arriba) {
-        this.arriba = arriba;
-    }
-
-    public JPanel getAbajo() {
-        return abajo;
-    }
-
-    public void setAbajo(JPanel abajo) {
-        this.abajo = abajo;
-    }
+    
+  //
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+    
 }
