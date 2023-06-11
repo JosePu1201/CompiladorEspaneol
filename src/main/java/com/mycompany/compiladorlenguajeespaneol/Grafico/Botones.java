@@ -4,6 +4,13 @@
  */
 package com.mycompany.compiladorlenguajeespaneol.Grafico;
 
+import com.mycompany.compiladorlenguajeespaneol.Flex_Y_Cup.Lexer;
+import com.mycompany.compiladorlenguajeespaneol.Flex_Y_Cup.parser;
+import java.io.StringReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.xml.sax.ext.LexicalHandler;
+
 /**
  *
  * @author jose
@@ -68,7 +75,16 @@ public class Botones extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        String entrada = panel.getCentro().getEntrada().getText();
+        StringReader lectrua = new StringReader(entrada);
+        Lexer lexer = new Lexer(lectrua);
+        parser nuevoparser = new parser(lexer);
+        try {
+            nuevoparser.parse();
+        } catch (Exception ex) {
+            Logger.getLogger(Botones.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
