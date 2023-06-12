@@ -6,6 +6,9 @@ package com.mycompany.compiladorlenguajeespaneol.Grafico;
 
 import com.mycompany.compiladorlenguajeespaneol.Flex_Y_Cup.Lexer;
 import com.mycompany.compiladorlenguajeespaneol.Flex_Y_Cup.parser;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.StringReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -92,13 +95,29 @@ public class Botones extends javax.swing.JPanel {
         }
         salida = salida +"\n}\n}";
         panel.getCentro().getTerminal().setText(salida);
+        crer(salida);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         panel.getCentro().getTerminal().setText("");
         panel.getCentro().getEntrada().setText("");
     }//GEN-LAST:event_jButton3ActionPerformed
-
+    public void crer(String entrada){
+        try {
+            String ruta = "salida.java";
+            File file = new File(ruta);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(entrada);
+            bw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

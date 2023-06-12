@@ -34,16 +34,43 @@ parser code {:
     public void setSalidas(ArrayList<String> salidas) {
         this.salidas = salidas;
     }
+        public String crearFor(String priemro,String segundo){
+        String salida = "";
+        try {
+            int uno = Integer.parseInt(priemro);
+            int dos = Integer.parseInt(segundo);
+            if(uno != dos){
+                if(uno < dos){
+                    salida = "for(int i = "+uno+"; "+"i"+"<"+dos+"; i++){\n";
+                }
+                else{
+                    salida = "for(int i = "+uno+"; "+"i"+">"+dos+"; i--){\n";
+                }
+            }
+        } catch (Exception e) {
+        }
+        System.out.println(salida);
+        return salida;
+    }
 
 :};
 //   
 terminal ESCRIBIR,LEER,ENTERO,FLOTANTE,STRING,PARENTESISABIERTO,PARENTESISCERRADO,DOSPUNTOS,COMA,MULTIPLICAR,MENOS,DIAGONAL,POTENCIA,MAS;
-terminal NUMERO,DECIMAL,ID,COMILLASTEXTO,PUNTOYCOMA,COMILLAS,SI,SINO,PARA,MAYOR,MENOR,IGUAL,IGUALDOBLE,MAYORIGUAL,MENORIGUAL,FINSI;
+terminal NUMERO,DECIMAL,ID,COMILLASTEXTO,PUNTOYCOMA,COMILLAS,SI,SINO,PARA,MAYOR,MENOR,IGUAL,IGUALDOBLE,MAYORIGUAL,MENORIGUAL,FINSI,FINPARA;
  
-non terminal inicio, op,declaracion,declaracionigual,tipo,escribir,condicion,numero,si,resultado,sino,sinosi;
+non terminal inicio, op,declaracion,declaracionigual,tipo,escribir,condicion,numero,si,resultado,sino,sinosi,for,ciclo;
 
-inicio  ::= op:b {:salidas.add(b.toString());
+inicio  ::= ciclo:b {:salidas.add(b.toString());
                 imprimir();:}
+        ;
+
+/*op:b inicio{:salidas.add(b.toString());
+                imprimir();:}
+        | op:b {:salidas.add(b.toString());
+                imprimir();:}
+        ;*/
+ciclo   ::= ciclo op:b {:RESULT = b.toString();:}
+        | op:b {:RESULT = b.toString();:}
         ;
 
 /*                      Condiciones
@@ -73,6 +100,7 @@ op  ::= declaracion:a {:RESULT = a;:}
     |   escribir:a {:RESULT = a;:}
     |   si:a {:RESULT = a;:}
     |   sinosi:a {:RESULT = a;:}
+    |   for:a {:RESULT = a;:}
     ;
 /*                      else
 --------------------------------------------------------------------*/
@@ -93,8 +121,15 @@ tipo    ::= ENTERO:a  {:RESULT = type(a.toString());:}
         ;
 /*                      Escribir
 ---------------------------------------------------------------------*/
-escribir    ::= ESCRIBIR PARENTESISABIERTO COMILLAS ID:a COMILLAS PARENTESISCERRADO PUNTOYCOMA{:RESULT = "System.out.println("+a.toString()+");";:}
+escribir    ::= ESCRIBIR PARENTESISABIERTO COMILLAS ID:a COMILLAS PARENTESISCERRADO PUNTOYCOMA{:RESULT = "System.out.println("+"\""+a.toString()+"\""+");";:}
             ;
+/*                      For
+----------------------------------------------------------------------*/
+for     ::=     PARA PARENTESISABIERTO NUMERO:num1 COMA NUMERO:num2 PARENTESISCERRADO op:a FINPARA {:RESULT = crearFor(num1.toString(),num2.toString())+a.toString()+"\n}";:}
+        ;
+
+
+
 /*
 //NUMERO
 a ::=   a:n1 MAS b:n2 {:RESULT = (double)n1 +(double) n2;  :}

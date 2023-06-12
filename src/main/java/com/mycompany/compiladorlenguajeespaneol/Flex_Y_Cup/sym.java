@@ -37,6 +37,7 @@ public class sym {
   public static final int error = 1;
   public static final int NUMERO = 16;
   public static final int DIAGONAL = 13;
+  public static final int FINPARA = 32;
   public static final int ENTERO = 4;
   public static final int FINSI = 31;
   public static final int MAS = 15;
@@ -72,7 +73,8 @@ public class sym {
   "IGUALDOBLE",
   "MAYORIGUAL",
   "MENORIGUAL",
-  "FINSI"
+  "FINSI",
+  "FINPARA"
   };
 }
 

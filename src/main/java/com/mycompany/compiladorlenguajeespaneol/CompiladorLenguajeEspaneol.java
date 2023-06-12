@@ -34,4 +34,21 @@ public class CompiladorLenguajeEspaneol {
         ventana.add(panel);
         ventana.setVisible(true);
     }
+//    public String crearFor(String priemro,String segundo){
+//        String salida = "";
+//        try {
+//            int uno = Integer.parseInt(priemro);
+//            int dos = Integer.parseInt(segundo);
+//            if(uno != dos){
+//                if(uno < dos){
+//                    salida = "for(int i = "+uno+"; "+"i"+">"+dos+"; i++){\n";
+//                }
+//                else{
+//                    salida = "for(int i = "+dos+"; "+"i"+"<"+uno+"; i--){\n";
+//                }
+//            }
+//        } catch (Exception e) {
+//        }
+//        return salida;
+//    }
 }

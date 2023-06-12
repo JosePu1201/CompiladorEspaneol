@@ -25,6 +25,7 @@ SI = "Si"
 SINO = "Sino"
 FINSI = "Finsi"
 PARA = "para"
+FINPARA = "finpara"
 PARENTESISABIERTO = "("
 PARENTESISCERRADO = ")"
 COMILLAS = "\""
@@ -62,6 +63,7 @@ menorIgual = [[IGUAL][MENOR]]|[[MENOR][IGUAL]]
 {FINSI}             {System.out.println(yytext());return new Symbol(sym.FINSI,yyline+1,yycolumn+1,yytext());}
 {SINO}             {System.out.println(yytext());return new Symbol(sym.SINO,yyline+1,yycolumn+1,yytext());}
 {PARA}             {System.out.println(yytext());return new Symbol(sym.PARA,yyline+1,yycolumn+1,yytext());}
+{FINPARA}             {System.out.println(yytext());return new Symbol(sym.FINPARA,yyline+1,yycolumn+1,yytext());}
 
 //  Escribir("hola");
 //agrupacion 
@@ -92,7 +94,6 @@ menorIgual = [[IGUAL][MENOR]]|[[MENOR][IGUAL]]
 {entero}               {System.out.println(yytext());return new Symbol(sym.NUMERO,yyline+1,yycolumn+1,yytext());}
 {decimal}               {System.out.println(yytext());return new Symbol(sym.DECIMAL,yyline+1,yycolumn+1,yytext());}
 {id}                    {System.out.println(yytext());return new Symbol(sym.ID,yyline+1,yycolumn+1,yytext());}
-//{textoPlano}                  {System.out.println(yytext()+"Texto plano");return new Symbol(sym.COMILLASTEXTO,yyline+1,yycolumn+1,yytext());}
 {WhiteSpace}            {}
 
 [^]                     {/*return new SYMBOL(sym.ERROR,yyline,yycolumn,yytext());*/}//Expresion regular de erro
