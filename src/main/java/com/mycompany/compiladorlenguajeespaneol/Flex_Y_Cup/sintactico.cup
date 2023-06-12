@@ -66,7 +66,7 @@ public boolean existeVar(String var) {
                 salida = "int";
                 break;
             case "flotante":
-                salida = "float";
+                salida = "double";
                 break;
 
             default:

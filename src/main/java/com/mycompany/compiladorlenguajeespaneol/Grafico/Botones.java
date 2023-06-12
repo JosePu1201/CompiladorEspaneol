@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.xml.sax.ext.LexicalHandler;
 
 /**
@@ -25,6 +26,7 @@ public class Botones extends javax.swing.JPanel {
 
     private panelPrincipal panel;
     private String salida;
+
     /**
      * Creates new form Botones
      */
@@ -45,6 +47,7 @@ public class Botones extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setLayout(new java.awt.GridLayout(1, 0));
 
@@ -75,7 +78,7 @@ public class Botones extends javax.swing.JPanel {
 
         jButton3.setBackground(new java.awt.Color(102, 0, 0));
         jButton3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(0, 204, 51));
+        jButton3.setForeground(new java.awt.Color(0, 255, 0));
         jButton3.setText("Limpiar pantallas ");
         jButton3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -84,6 +87,17 @@ public class Botones extends javax.swing.JPanel {
             }
         });
         add(jButton3);
+
+        jButton4.setBackground(new java.awt.Color(0, 255, 0));
+        jButton4.setFont(new java.awt.Font("Dialog", 3, 18)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(0, 0, 0));
+        jButton4.setText("Acerca de");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        add(jButton4);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -101,9 +115,9 @@ public class Botones extends javax.swing.JPanel {
                 + "public static void main(String [] args) {\n"
                 + " Scanner myObj = new Scanner(System.in);\n";
         for (String salida1 : nuevoparser.getSalidas()) {
-            salida = salida +"\n"+salida1;
+            salida = salida + "\n" + salida1;
         }
-        salida = salida +"\n}\n}";
+        salida = salida + "\n}\n}";
         panel.getCentro().getTerminal().setText(salida);
         crer(salida);
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -114,41 +128,75 @@ public class Botones extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        comandos("javac", "salida.java");
+        comandos("java", "salida");
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        String algo = "Espaneol\n"
+                + "El siguiente lenguaje esta creado\n"
+                + "con el fin de que el usuario cree\n"
+                + "codigo en espanol para que luego el\n"
+                + "id lo compile a codigo java y luego\n"
+                + "lo ejecute, a continuacion te mostramos\n"
+                + "ejemplos de la sitaxis:\n\n"
+                + "Escribir en consola:\n"
+                + "\tEscribir(\"Texto a esfribir\")\n"
+                + "Crear variables:\n"
+                + "\tEntero nombreVariable;\n"
+                + "\tTexto nombreVariable;\n"
+                + "\tflotante nombreVariable;\n"
+                + "Ciclos:\n"
+                + "\tpara(puntoa,puntob)\n"
+                + "\tUna linea de codigo de otro tipo\n"
+                + "\tfin para\n"
+                + "Comparaciones:\n"
+                + "\tSi(condicion)\n"
+                + "\tUna linea de codigo de otro tipo\n"
+                + "\tFinSi\n"
+                + "\tSino\n"
+                + "\tUna linde de codigo de otro tipo\n"
+                + "Lectura de entrada de texto:\n"
+                + "\tLeer(vaariableDondeGuardar);\n"
+                + "Para mas dudas o consultas consultar con el desarrollador\n"
+                + "E-mail: joseluis-pusam@cunoc.edu.gt";
+        JOptionPane.showMessageDialog(null, algo, "Acerca de",JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jButton4ActionPerformed
+    public void comandos(String primero,String segundo) {
         try {
-            // Comando para abrir la terminal en Ubuntu
-            String[] command = { "gnome-terminal" };
-            String compilar = "java salida";
-            
-            // Ejecutar el comando
-            Process process = Runtime.getRuntime().exec(command);
+            // Comando a ejecutar
+            String[] command = {primero,segundo};
 
-            // Esperar a que el proceso de la terminal se cierre
-            int exitCode = process.waitFor();
-            ProcessBuilder processBuilder = new ProcessBuilder();
-            processBuilder.command("bash", "-c", compilar);
-             processBuilder.redirectErrorStream(true);
+            // Crear el proceso
+            ProcessBuilder pb = new ProcessBuilder(command);
 
-            // Ejecutar el comando
-            Process processa = processBuilder.start();
+            // Redirigir la salida del proceso
+            pb.redirectErrorStream(true);
+
+            // Iniciar el proceso
+            Process process = pb.start();
 
             // Leer la salida del proceso
-            BufferedReader reader = new BufferedReader(new InputStreamReader(processa.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
+            panel.getCentro().getTerminal().append("\n----------"+primero+" "+segundo+"----------");
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                panel.getCentro().getTerminal().append("\n"+line);
             }
-            // Verificar el código de salida del proceso
-            if (exitCode == 0) {
-                System.out.println("Terminal abierta correctamente.");
-            } else {
-                System.out.println("Error al abrir la terminal.");
-            }
+           panel.getCentro().getTerminal().append("\n");
+            // Esperar a que el proceso termine
+            int exitCode = process.waitFor();
+            System.out.println("El proceso terminó con el código de salida: " + exitCode);
+
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
 
-    }//GEN-LAST:event_jButton2ActionPerformed
-    public void crer(String entrada){
+    public void crer(String entrada) {
+        comandos("rm", "salida.java");
+        comandos("rm", "salida.class");
         try {
             String ruta = "salida.java";
             File file = new File(ruta);
@@ -169,5 +217,6 @@ public class Botones extends javax.swing.JPanel {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     // End of variables declaration//GEN-END:variables
 }
