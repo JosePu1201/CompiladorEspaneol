@@ -2,34 +2,98 @@ package com.mycompany.compiladorlenguajeespaneol.Flex_Y_Cup;
 import java_cup.runtime.*;
 import java.util.*;
 parser code {:
+        ArrayList  <String> salidas = new ArrayList<>();
 
+        public void imprimir(){
+                for (String salida : salidas) {
+                        System.out.println(salida);
+                }
+        }
+        public String type(String entrada) {
+        String salida = "Object";
+        switch (entrada) {
+            case "Texto":
+                salida = "String";
+                break;
+            case "Entero":
+                salida = "int";
+                break;
+            case "Flotante":
+                salida = "float";
+                break;
+
+            default:
+                break;
+        }
+        return salida;
+    }
+    public ArrayList<String> getSalidas() {
+        return salidas;
+    }
+
+    public void setSalidas(ArrayList<String> salidas) {
+        this.salidas = salidas;
+    }
 
 :};
 //   
-terminal ESCRIBIR,LEER,ENTERO,FLOTANTE,STRING,PARENTESISABIERTO,PARENTESISCERRADO,COMILLAS,DOSPUNTOS,COMA,MULTIPLICAR,MENOS,DIAGONAL,POTENCIA,MAS;
-terminal NUMERO,DECIMAL,ID,COMILLASTEXTO,PUNTOYCOMA;
+terminal ESCRIBIR,LEER,ENTERO,FLOTANTE,STRING,PARENTESISABIERTO,PARENTESISCERRADO,DOSPUNTOS,COMA,MULTIPLICAR,MENOS,DIAGONAL,POTENCIA,MAS;
+terminal NUMERO,DECIMAL,ID,COMILLASTEXTO,PUNTOYCOMA,COMILLAS,SI,SINO,PARA,MAYOR,MENOR,IGUAL,IGUALDOBLE,MAYORIGUAL,MENORIGUAL,FINSI;
  
-non terminal inicio, op,declaracion,declaracionigual,tipo,escribir;
+non terminal inicio, op,declaracion,declaracionigual,tipo,escribir,condicion,numero,si,resultado,sino,sinosi;
 
-inicio  ::= op;
+inicio  ::= op:b {:salidas.add(b.toString());
+                imprimir();:}
+        ;
 
-/*                      Opciones
+/*                      Condiciones
+---------------------------------------------------------------------*/
+condicion       ::=     MAYOR:a {:RESULT = a;:}
+                |       MENOR:a  {:RESULT = a;:}
+                |       IGUALDOBLE:a {:RESULT = a;:}
+                |       MAYORIGUAL:a {:RESULT = a;:}
+                |       MENORIGUAL:a  {:RESULT = a;:}
+                ;
+numero  ::=     NUMERO:a {:RESULT = a;:}
+        |       FLOTANTE:a {:RESULT = a;:}
+        ;
+
+resultado       ::=     numero:a condicion:b numero:c {:RESULT = a.toString()+b.toString()+c.toString();:}
+                |       ID condicion numero
+                |       numero condicion ID
+                |       ID condicion ID
+                ;
+/*                      If
 --------------------------------------------------------------------*/
-op  ::= declaracion
-    |   escribir
-    ;
 
+si      ::=     SI PARENTESISABIERTO resultado:a PARENTESISCERRADO op:b FINSI{:RESULT = "if ("+a.toString()+"){\n"+b.toString()+"\n}";:}
+        ;
+
+op  ::= declaracion:a {:RESULT = a;:}
+    |   escribir:a {:RESULT = a;:}
+    |   si:a {:RESULT = a;:}
+    |   sinosi:a {:RESULT = a;:}
+    ;
+/*                      else
+--------------------------------------------------------------------*/
+sino    ::= SINO op:a FINSI{:RESULT = "else {\n"+a.toString()+"\n}";:}
+        ;
+/*                      elseif
+---------------------------------------------------------------------*/
+sinosi  ::= si:a sino:b {:RESULT = a.toString()+b.toString();:}
+        ;
 /*                      Delaraciones
 --------------------------------------------------------------------*/
-declaracion ::= tipo ID PUNTOYCOMA;
+declaracion ::= tipo:a ID:b PUNTOYCOMA {:RESULT = a.toString()+" "+b.toString()+";";:}
+; 
 
-tipo    ::= ENTERO:a  {:System.out.println(a.toString());:}
-        |   FLOTANTE
-        |   STRING
+tipo    ::= ENTERO:a  {:RESULT = type(a.toString());:}
+        |   FLOTANTE:a    {:RESULT = type(a.toString());:}
+        |   STRING:a      {:RESULT = type(a.toString());:}
         ;
 /*                      Escribir
 ---------------------------------------------------------------------*/
-escribir    ::= ESCRIBIR PARENTESISABIERTO COMILLASTEXTO:a PARENTESISCERRADO PUNTOYCOMA{:System.out.println(a.toString());:}
+escribir    ::= ESCRIBIR PARENTESISABIERTO COMILLAS ID:a COMILLAS PARENTESISCERRADO PUNTOYCOMA{:RESULT = "System.out.println("+a.toString()+");";:}
             ;
 /*
 //NUMERO

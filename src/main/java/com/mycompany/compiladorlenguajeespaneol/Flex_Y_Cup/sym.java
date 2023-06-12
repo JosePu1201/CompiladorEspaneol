@@ -8,28 +8,38 @@ package com.mycompany.compiladorlenguajeespaneol.Flex_Y_Cup;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int MULTIPLICAR = 12;
-  public static final int MENOS = 13;
-  public static final int COMILLASTEXTO = 20;
-  public static final int PUNTOYCOMA = 21;
-  public static final int DOSPUNTOS = 10;
-  public static final int DECIMAL = 18;
+  public static final int MULTIPLICAR = 11;
+  public static final int MENOS = 12;
+  public static final int MENOR = 26;
+  public static final int COMILLASTEXTO = 19;
+  public static final int PUNTOYCOMA = 20;
+  public static final int DOSPUNTOS = 9;
+  public static final int MENORIGUAL = 30;
+  public static final int IGUAL = 27;
+  public static final int DECIMAL = 17;
   public static final int LEER = 3;
-  public static final int POTENCIA = 15;
+  public static final int POTENCIA = 14;
   public static final int FLOTANTE = 5;
-  public static final int ID = 19;
+  public static final int PARA = 24;
+  public static final int COMILLAS = 21;
+  public static final int ID = 18;
   public static final int PARENTESISCERRADO = 8;
-  public static final int COMILLAS = 9;
   public static final int PARENTESISABIERTO = 7;
   public static final int STRING = 6;
-  public static final int COMA = 11;
+  public static final int COMA = 10;
+  public static final int IGUALDOBLE = 28;
+  public static final int MAYOR = 25;
   public static final int EOF = 0;
+  public static final int SINO = 23;
+  public static final int MAYORIGUAL = 29;
+  public static final int SI = 22;
   public static final int ESCRIBIR = 2;
-  public static final int NUMERO = 17;
   public static final int error = 1;
-  public static final int DIAGONAL = 14;
+  public static final int NUMERO = 16;
+  public static final int DIAGONAL = 13;
   public static final int ENTERO = 4;
-  public static final int MAS = 16;
+  public static final int FINSI = 31;
+  public static final int MAS = 15;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -40,7 +50,6 @@ public class sym {
   "STRING",
   "PARENTESISABIERTO",
   "PARENTESISCERRADO",
-  "COMILLAS",
   "DOSPUNTOS",
   "COMA",
   "MULTIPLICAR",
@@ -52,7 +61,18 @@ public class sym {
   "DECIMAL",
   "ID",
   "COMILLASTEXTO",
-  "PUNTOYCOMA"
+  "PUNTOYCOMA",
+  "COMILLAS",
+  "SI",
+  "SINO",
+  "PARA",
+  "MAYOR",
+  "MENOR",
+  "IGUAL",
+  "IGUALDOBLE",
+  "MAYORIGUAL",
+  "MENORIGUAL",
+  "FINSI"
   };
 }
 

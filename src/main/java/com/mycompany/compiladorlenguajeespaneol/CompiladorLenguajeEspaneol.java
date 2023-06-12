@@ -13,7 +13,17 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  * @author jose
  */
 public class CompiladorLenguajeEspaneol {
-
+/*
+    Pruebas Xd
+    Si(8>4)
+    Texto algo;
+    Finsi
+    Sino
+    Si(5<25)
+    Texto nunca;
+    Finsi
+    Finsi
+    */
     public static void main(String[] args) {
         JFrame ventana = new JFrame();
         panelPrincipal panel = new panelPrincipal();

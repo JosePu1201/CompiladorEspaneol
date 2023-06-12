@@ -21,6 +21,10 @@ LEER = "Leer"
 ENTERO = "Entero"
 FLOTANTE = "flotante"
 STRING = "Texto"
+SI = "Si"
+SINO = "Sino"
+FINSI = "Finsi"
+PARA = "para"
 PARENTESISABIERTO = "("
 PARENTESISCERRADO = ")"
 COMILLAS = "\""
@@ -32,6 +36,9 @@ MENOS = "-"
 DIAGONAL = "/"
 POTENCIA = "^"
 MAS = "+"
+MAYOR = ">"
+MENOR = "<"
+IGUAL = "="
 ESPACIO = " "
     //Expresiones regulares
 LineTerminator = \n|\r|\n\r 
@@ -39,7 +46,10 @@ WhiteSpace = {LineTerminator}|[ \t\f]|[" "]
 entero = 0|[1-9][0-9]*
 decimal = {entero}\.\d
 id = [a-zA-Z][a-zA-Z|0-9]*
-textoPlano = [COMILLAS][id]*[COMILLAS]
+textoPlano = [^\n]
+igualDoble = [IGUAL][IGUAL]
+mayorIgual = [[IGUAL][MAYOR]]|[[MAYOR][IGUAL]]
+menorIgual = [[IGUAL][MENOR]]|[[MENOR][IGUAL]]
 %%
 
 //palabras reservadas 
@@ -48,8 +58,12 @@ textoPlano = [COMILLAS][id]*[COMILLAS]
 {ENTERO}                  {System.out.println(yytext());return new Symbol(sym.ENTERO,yyline+1,yycolumn+1,yytext());}
 {FLOTANTE}           {System.out.println(yytext());return new Symbol(sym.FLOTANTE,yyline+1,yycolumn+1,yytext());}
 {STRING}             {System.out.println(yytext());return new Symbol(sym.STRING,yyline+1,yycolumn+1,yytext());}
+{SI}             {System.out.println(yytext());return new Symbol(sym.SI,yyline+1,yycolumn+1,yytext());}
+{FINSI}             {System.out.println(yytext());return new Symbol(sym.FINSI,yyline+1,yycolumn+1,yytext());}
+{SINO}             {System.out.println(yytext());return new Symbol(sym.SINO,yyline+1,yycolumn+1,yytext());}
+{PARA}             {System.out.println(yytext());return new Symbol(sym.PARA,yyline+1,yycolumn+1,yytext());}
 
-
+//  Escribir("hola");
 //agrupacion 
 {PARENTESISABIERTO}                     {System.out.println(yytext());return new Symbol(sym.PARENTESISABIERTO,yyline+1,yycolumn+1,yytext());}
 {PARENTESISCERRADO}                     {System.out.println(yytext());return new Symbol(sym.PARENTESISCERRADO,yyline+1,yycolumn+1,yytext());}
@@ -65,12 +79,20 @@ textoPlano = [COMILLAS][id]*[COMILLAS]
 {DIAGONAL}                      {System.out.println(yytext());return new Symbol(sym.DIAGONAL,yyline+1,yycolumn+1,yytext());}
 {POTENCIA}                      {System.out.println(yytext());return new Symbol(sym.POTENCIA,yyline+1,yycolumn+1,yytext());}                        
 {MAS}                           {System.out.println(yytext());return new Symbol(sym.MAS,yyline+1,yycolumn+1,yytext());}
+{MAYOR}                      {System.out.println(yytext());return new Symbol(sym.MAYOR,yyline+1,yycolumn+1,yytext());}
+{MENOR}                    {System.out.println(yytext());return new Symbol(sym.MENOR,yyline+1,yycolumn+1,yytext());}
+{IGUAL}                     {System.out.println(yytext());return new Symbol(sym.IGUAL,yyline+1,yycolumn+1,yytext());}
+{igualDoble}                          {System.out.println(yytext());return new Symbol(sym.IGUALDOBLE,yyline+1,yycolumn+1,yytext());}
+{mayorIgual}                          {System.out.println(yytext());return new Symbol(sym.MAYORIGUAL,yyline+1,yycolumn+1,yytext());}
+{menorIgual}                          {System.out.println(yytext());return new Symbol(sym.MENORIGUAL,yyline+1,yycolumn+1,yytext());}
+
+
 
 //reglas lexicas 
 {entero}               {System.out.println(yytext());return new Symbol(sym.NUMERO,yyline+1,yycolumn+1,yytext());}
 {decimal}               {System.out.println(yytext());return new Symbol(sym.DECIMAL,yyline+1,yycolumn+1,yytext());}
 {id}                    {System.out.println(yytext());return new Symbol(sym.ID,yyline+1,yycolumn+1,yytext());}
-{textoPlano}                  {System.out.println(yytext());return new Symbol(sym.COMILLASTEXTO,yyline+1,yycolumn+1,yytext());}
+//{textoPlano}                  {System.out.println(yytext()+"Texto plano");return new Symbol(sym.COMILLASTEXTO,yyline+1,yycolumn+1,yytext());}
 {WhiteSpace}            {}
 
-[^]                     {/*return new SYMBOL(sym.ERROR,yyline,yycolumn,yytext());*/}//Expresion regular de error
+[^]                     {/*return new SYMBOL(sym.ERROR,yyline,yycolumn,yytext());*/}//Expresion regular de erro

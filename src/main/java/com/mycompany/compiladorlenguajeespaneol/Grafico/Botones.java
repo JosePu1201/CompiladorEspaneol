@@ -18,6 +18,7 @@ import org.xml.sax.ext.LexicalHandler;
 public class Botones extends javax.swing.JPanel {
 
     private panelPrincipal panel;
+    private String salida;
     /**
      * Creates new form Botones
      */
@@ -84,7 +85,13 @@ public class Botones extends javax.swing.JPanel {
         } catch (Exception ex) {
             Logger.getLogger(Botones.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        salida = "public class salida {\n"
+                + "public static void main(String [] args) {\n";
+        for (String salida1 : nuevoparser.getSalidas()) {
+            salida = salida +"\n"+salida1;
+        }
+        salida = salida +"\n}\n}";
+        panel.getCentro().getTerminal().setText(salida);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
