@@ -12,6 +12,7 @@ public class Abajo extends javax.swing.JPanel {
 
     /**
      * Creates new form Abajo
+     * informacion de las medias pantallas 
      */
     public Abajo() {
         initComponents();

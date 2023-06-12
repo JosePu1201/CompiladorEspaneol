@@ -9,6 +9,7 @@ import javax.swing.JTextArea;
 /**
  *
  * @author jose
+ * dos entradas de texto
  */
 public class EntradaSalida extends javax.swing.JPanel {
     

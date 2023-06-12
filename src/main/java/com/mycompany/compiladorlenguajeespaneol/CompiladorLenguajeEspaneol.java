@@ -14,41 +14,43 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  */
 public class CompiladorLenguajeEspaneol {
 /*
-    Pruebas Xd
-    Si(8>4)
-    Texto algo;
-    Finsi
-    Sino
-    Si(5<25)
-    Texto nunca;
-    Finsi
-    Finsi
+    Escribir("EstoEsUnaPrueba");
+Escribir("Variables");
+Entero entero = 1;
+Texto string;
+flotante decimal = 22.5;
+Escribir("Flotane");
+Escribir(decimal);
+Entero entero2 = 5+5;
+Escribir("numEntero");
+Escribir(entero);
+Escribir("Entero2");
+Escribir(entero2);
+para(1,5)
+	entero2 = entero2 +1;
+finpara
+Escribir("Entero2");
+Escribir(entero2);
+Si( entero2 < entero )
+	Escribir("EsMenor");
+Finsi
+Sino
+	Si(55>22)
+		Escribir("EsMayor");
+	Finsi
+Finsi
     */
     public static void main(String[] args) {
+        /*
+        Frame principal y ventanas*/
         JFrame ventana = new JFrame();
         panelPrincipal panel = new panelPrincipal();
-        ventana.setTitle("Compilador");
+        ventana.setTitle("CompiladorE");
         ventana.setSize(1000, 500);
         ventana.setLocationRelativeTo(null);
         ventana.setDefaultCloseOperation(EXIT_ON_CLOSE);
         ventana.add(panel);
         ventana.setVisible(true);
     }
-//    public String crearFor(String priemro,String segundo){
-//        String salida = "";
-//        try {
-//            int uno = Integer.parseInt(priemro);
-//            int dos = Integer.parseInt(segundo);
-//            if(uno != dos){
-//                if(uno < dos){
-//                    salida = "for(int i = "+uno+"; "+"i"+">"+dos+"; i++){\n";
-//                }
-//                else{
-//                    salida = "for(int i = "+dos+"; "+"i"+"<"+uno+"; i--){\n";
-//                }
-//            }
-//        } catch (Exception e) {
-//        }
-//        return salida;
-//    }
+
 }

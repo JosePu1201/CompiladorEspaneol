@@ -29,6 +29,7 @@ public class Botones extends javax.swing.JPanel {
 
     /**
      * Creates new form Botones
+     * botones de aaccion para compilaa, ejecutar, limpiar pantalla y acerca de 
      */
     public Botones(panelPrincipal panel) {
         this.panel = panel;
@@ -99,7 +100,9 @@ public class Botones extends javax.swing.JPanel {
         });
         add(jButton4);
     }// </editor-fold>//GEN-END:initComponents
-
+    /*
+    *Obtiene el tecto del area de texto en basa a las salidas del parser en caso de que no tenga ningun error
+    */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String entrada = panel.getCentro().getEntrada().getText();
         StringReader lectrua = new StringReader(entrada);
@@ -111,6 +114,7 @@ public class Botones extends javax.swing.JPanel {
             Logger.getLogger(Botones.class.getName()).log(Level.SEVERE, null, ex);
         }
         salida = "import java.util.Scanner;\n"
+                + "import javax.swing.JOptionPane;\n"
                 + "public class salida {\n"
                 + "public static void main(String [] args) {\n"
                 + " Scanner myObj = new Scanner(System.in);\n";
@@ -121,18 +125,25 @@ public class Botones extends javax.swing.JPanel {
         panel.getCentro().getTerminal().setText(salida);
         crer(salida);
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    /*
+    *Limpa los dos areas de texto
+    */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         panel.getCentro().getTerminal().setText("");
         panel.getCentro().getEntrada().setText("");
     }//GEN-LAST:event_jButton3ActionPerformed
-
+    /*
+    *invoca los metodos de terminal para poder ejecutar desde la app
+    */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         comandos("javac", "salida.java");
+        comandos("gnome-terminal", "");
         comandos("java", "salida");
 
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    /*
+    *Informacion a cerca del programa
+    */
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         String algo = "Espaneol\n"
                 + "El siguiente lenguaje esta creado\n"
@@ -163,6 +174,9 @@ public class Botones extends javax.swing.JPanel {
                 + "E-mail: joseluis-pusam@cunoc.edu.gt";
         JOptionPane.showMessageDialog(null, algo, "Acerca de",JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton4ActionPerformed
+    /*
+    *Comandos de ejecucion para la terminal
+    */
     public void comandos(String primero,String segundo) {
         try {
             // Comando a ejecutar
@@ -193,7 +207,9 @@ public class Botones extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }
-
+    /*
+    Creacion de los archivos .java previo a la eliminacion de los anteriores para evitar conflictos 
+    */
     public void crer(String entrada) {
         comandos("rm", "salida.java");
         comandos("rm", "salida.class");

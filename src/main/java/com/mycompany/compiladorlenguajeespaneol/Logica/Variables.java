@@ -7,6 +7,7 @@ package com.mycompany.compiladorlenguajeespaneol.Logica;
 /**
  *
  * @author jose
+ *Clases de variables para saber si existe algo o no
  */
 public class Variables {
     private String nombre;
