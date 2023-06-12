@@ -88,8 +88,10 @@ public class Botones extends javax.swing.JPanel {
         } catch (Exception ex) {
             Logger.getLogger(Botones.class.getName()).log(Level.SEVERE, null, ex);
         }
-        salida = "public class salida {\n"
-                + "public static void main(String [] args) {\n";
+        salida = "import java.util.Scanner;\n"
+                + "public class salida {\n"
+                + "public static void main(String [] args) {\n"
+                + " Scanner myObj = new Scanner(System.in);\n";
         for (String salida1 : nuevoparser.getSalidas()) {
             salida = salida +"\n"+salida1;
         }

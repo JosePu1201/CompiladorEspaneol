@@ -1,7 +1,9 @@
 package com.mycompany.compiladorlenguajeespaneol.Flex_Y_Cup;
 import java_cup.runtime.*;
+import com.mycompany.compiladorlenguajeespaneol.Logica.Variables;
 import java.util.*;
 parser code {:
+        ArrayList<Variables> vars = new ArrayList<>();
         ArrayList  <String> salidas = new ArrayList<>();
 
         public void imprimir(){
@@ -9,6 +11,51 @@ parser code {:
                         System.out.println(salida);
                 }
         }
+public boolean existeVar(String var) {
+        boolean bandera = false;
+        for (Variables var1 : vars) {
+            if (var.equals(var1.getNombre())) {
+                bandera = true;
+                break;
+            }
+        }
+        return bandera;
+    }
+
+    public boolean mismoTipo(String var1, String dato) {
+        boolean si = false;
+        for (Variables var : vars) {
+            if (var.getNombre().equals(var1)) {
+                switch (var.getTipo()) {
+                    case "String":
+                            try {
+                        String algo = dato.toString();
+                        si = true;
+                    } catch (Exception e) {
+                    }
+                    break;
+                    case "int":
+                                                        try {
+                        int algo = Integer.parseInt(dato);
+                        si = true;
+                    } catch (Exception e) {
+                    }
+                    break;
+                    case "float":
+                                                            try {
+                        float algo = Float.parseFloat(dato);
+                        si = true;
+                    } catch (Exception e) {
+                    }
+                    break;
+                    default:
+                        throw new AssertionError();
+                }
+            }
+
+        }
+        return si;
+    }
         public String type(String entrada) {
         String salida = "Object";
         switch (entrada) {
@@ -18,7 +65,7 @@ parser code {:
             case "Entero":
                 salida = "int";
                 break;
-            case "Flotante":
+            case "flotante":
                 salida = "float";
                 break;
 
@@ -58,37 +105,35 @@ parser code {:
 terminal ESCRIBIR,LEER,ENTERO,FLOTANTE,STRING,PARENTESISABIERTO,PARENTESISCERRADO,DOSPUNTOS,COMA,MULTIPLICAR,MENOS,DIAGONAL,POTENCIA,MAS;
 terminal NUMERO,DECIMAL,ID,COMILLASTEXTO,PUNTOYCOMA,COMILLAS,SI,SINO,PARA,MAYOR,MENOR,IGUAL,IGUALDOBLE,MAYORIGUAL,MENORIGUAL,FINSI,FINPARA;
  
-non terminal inicio, op,declaracion,declaracionigual,tipo,escribir,condicion,numero,si,resultado,sino,sinosi,for,ciclo;
+non terminal inicio, op,declaracion,declaracionigual,tipo,escribir,condicion,numero,si,resultado,sino,sinosi,for,ciclo,ope,operacion,asig;
+non terminal asig1,asig2,lect;
 
-inicio  ::= ciclo:b {:salidas.add(b.toString());
-                imprimir();:}
+inicio  ::= ciclo {::}
         ;
+        
 
-/*op:b inicio{:salidas.add(b.toString());
-                imprimir();:}
-        | op:b {:salidas.add(b.toString());
-                imprimir();:}
-        ;*/
-ciclo   ::= ciclo op:b {:RESULT = b.toString();:}
-        | op:b {:RESULT = b.toString();:}
+ciclo   ::=    ciclo op:b  {:   if(b.toString() != ""){
+                                salidas.add(b.toString());}:}
+        |       op:b    {:if(b.toString() != ""){
+                                salidas.add(b.toString());}:}
         ;
 
 /*                      Condiciones
 ---------------------------------------------------------------------*/
 condicion       ::=     MAYOR:a {:RESULT = a;:}
                 |       MENOR:a  {:RESULT = a;:}
-                |       IGUALDOBLE:a {:RESULT = a;:}
-                |       MAYORIGUAL:a {:RESULT = a;:}
-                |       MENORIGUAL:a  {:RESULT = a;:}
+                |       IGUAL:a IGUAL {:RESULT = "==";:}
+                |       MAYOR IGUAL:a {:RESULT = ">=";:}
+                |       MENOR IGUAL:a  {:RESULT = "<=";:}
                 ;
 numero  ::=     NUMERO:a {:RESULT = a;:}
-        |       FLOTANTE:a {:RESULT = a;:}
+        |       DECIMAL:a {:RESULT = a;:}
         ;
 
 resultado       ::=     numero:a condicion:b numero:c {:RESULT = a.toString()+b.toString()+c.toString();:}
-                |       ID condicion numero
-                |       numero condicion ID
-                |       ID condicion ID
+                |       ID:a condicion:b numero:c     {:RESULT = a.toString()+b.toString()+c.toString();:}
+                |       numero:a condicion:b ID:c     {:RESULT = a.toString()+b.toString()+c.toString();:}
+                |       ID:a condicion:b ID:c         {:RESULT = a.toString()+b.toString()+c.toString();:}
                 ;
 /*                      If
 --------------------------------------------------------------------*/
@@ -101,6 +146,8 @@ op  ::= declaracion:a {:RESULT = a;:}
     |   si:a {:RESULT = a;:}
     |   sinosi:a {:RESULT = a;:}
     |   for:a {:RESULT = a;:}
+    |   asig:a {:RESULT = a;:}
+    |   lect:a {:RESULT = a;:}
     ;
 /*                      else
 --------------------------------------------------------------------*/
@@ -112,7 +159,13 @@ sinosi  ::= si:a sino:b {:RESULT = a.toString()+b.toString();:}
         ;
 /*                      Delaraciones
 --------------------------------------------------------------------*/
-declaracion ::= tipo:a ID:b PUNTOYCOMA {:RESULT = a.toString()+" "+b.toString()+";";:}
+declaracion ::= tipo:a ID:b PUNTOYCOMA {:       
+                                                if(existeVar(b.toString())){
+                                                        RESULT = "";
+                                                }
+                                                else{
+                                                vars.add(new Variables(b.toString(),a.toString()));
+                                                RESULT = a.toString()+" "+b.toString()+";";}:}
 ; 
 
 tipo    ::= ENTERO:a  {:RESULT = type(a.toString());:}
@@ -122,14 +175,46 @@ tipo    ::= ENTERO:a  {:RESULT = type(a.toString());:}
 /*                      Escribir
 ---------------------------------------------------------------------*/
 escribir    ::= ESCRIBIR PARENTESISABIERTO COMILLAS ID:a COMILLAS PARENTESISCERRADO PUNTOYCOMA{:RESULT = "System.out.println("+"\""+a.toString()+"\""+");";:}
+            |   ESCRIBIR PARENTESISABIERTO  ID:a  PARENTESISCERRADO PUNTOYCOMA{:RESULT = "System.out.println("+a.toString()+");";:}
             ;
 /*                      For
 ----------------------------------------------------------------------*/
 for     ::=     PARA PARENTESISABIERTO NUMERO:num1 COMA NUMERO:num2 PARENTESISCERRADO op:a FINPARA {:RESULT = crearFor(num1.toString(),num2.toString())+a.toString()+"\n}";:}
         ;
+/*                      Asignacio
+-----------------------------------------------------------------------*/
+asig1   ::= tipo:a ID:b IGUAL{: vars.add(new Variables(b.toString(),a.toString()));
+                                RESULT = a.toString()+" "+b.toString();:}
+        ;
+asig2   ::=     ID:a IGUAL {:RESULT = a.toString();:}
+        ;
+asig    ::=     asig2:a ID:b PUNTOYCOMA {:RESULT = a.toString()+" = "+b.toString()+";\n"; :}
+        |       asig2:a numero:b PUNTOYCOMA {:RESULT = a.toString()+" = "+b.toString()+";\n"; :} 
+        |       asig2:a operacion:b PUNTOYCOMA {:RESULT = a.toString()+" = "+b.toString()+";\n"; :}
+        |       asig1:a numero:b PUNTOYCOMA {:RESULT = a.toString()+" = "+b.toString()+";\n"; :}
+        |       asig1:a operacion:b PUNTOYCOMA {:RESULT = a.toString()+" = "+b.toString()+";\n"; :}
+        |       asig1:a ID:b PUNTOYCOMA {:RESULT = a.toString()+" = "+b.toString()+";\n"; :}
+        ;
+        //|       asig2:a operacion:b{:RESULT = a.toString()+" = "+b.toString()+"\n"; :}
+        
 
+/*                      Operaciones
+------------------------------------------------------------------------*/
+ope     ::=     MAS:a     {:RESULT = a.toString();:}
+        |       MENOS:a    {:RESULT = a.toString();:}
+        |       MULTIPLICAR:a     {:RESULT = a.toString();:}
+        |       DIAGONAL:a    {:RESULT = a.toString();:}
+        ;
 
-
+operacion       ::=     numero:a ope:b numero:c {:RESULT = a.toString()+b.toString()+c.toString();:}
+                |       ID:a ope:b numero:c {:RESULT = a.toString()+b.toString()+c.toString();:}
+                |       numero:a ope:b ID:c {:RESULT = a.toString()+b.toString()+c.toString();:}
+                |       ID:a ope:b ID:c {:RESULT = a.toString()+b.toString()+c.toString();:}
+                ;
+/*                      Leer
+----------------------------------------------------------------------------*/
+lect    ::=     LEER PARENTESISABIERTO ID:a PARENTESISCERRADO PUNTOYCOMA {:RESULT = a.toString()+"="+"myObj.nextLine();"; :}
+        ;
 /*
 //NUMERO
 a ::=   a:n1 MAS b:n2 {:RESULT = (double)n1 +(double) n2;  :}
