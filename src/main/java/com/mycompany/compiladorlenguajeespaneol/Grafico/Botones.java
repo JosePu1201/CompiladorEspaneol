@@ -6,9 +6,12 @@ package com.mycompany.compiladorlenguajeespaneol.Grafico;
 
 import com.mycompany.compiladorlenguajeespaneol.Flex_Y_Cup.Lexer;
 import com.mycompany.compiladorlenguajeespaneol.Flex_Y_Cup.parser;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,6 +66,11 @@ public class Botones extends javax.swing.JPanel {
         jButton2.setForeground(new java.awt.Color(0, 255, 0));
         jButton2.setText("Ejecutar");
         jButton2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         add(jButton2);
 
         jButton3.setBackground(new java.awt.Color(102, 0, 0));
@@ -104,6 +112,42 @@ public class Botones extends javax.swing.JPanel {
         panel.getCentro().getTerminal().setText("");
         panel.getCentro().getEntrada().setText("");
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            // Comando para abrir la terminal en Ubuntu
+            String[] command = { "gnome-terminal" };
+            String compilar = "java salida";
+            
+            // Ejecutar el comando
+            Process process = Runtime.getRuntime().exec(command);
+
+            // Esperar a que el proceso de la terminal se cierre
+            int exitCode = process.waitFor();
+            ProcessBuilder processBuilder = new ProcessBuilder();
+            processBuilder.command("bash", "-c", compilar);
+             processBuilder.redirectErrorStream(true);
+
+            // Ejecutar el comando
+            Process processa = processBuilder.start();
+
+            // Leer la salida del proceso
+            BufferedReader reader = new BufferedReader(new InputStreamReader(processa.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+            // Verificar el código de salida del proceso
+            if (exitCode == 0) {
+                System.out.println("Terminal abierta correctamente.");
+            } else {
+                System.out.println("Error al abrir la terminal.");
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }//GEN-LAST:event_jButton2ActionPerformed
     public void crer(String entrada){
         try {
             String ruta = "salida.java";
