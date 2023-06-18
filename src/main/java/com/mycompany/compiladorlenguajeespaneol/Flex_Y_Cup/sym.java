@@ -8,38 +8,44 @@ package com.mycompany.compiladorlenguajeespaneol.Flex_Y_Cup;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int MULTIPLICAR = 11;
-  public static final int MENOS = 12;
-  public static final int MENOR = 26;
-  public static final int COMILLASTEXTO = 19;
-  public static final int PUNTOYCOMA = 20;
+  public static final int DIAGONAL = 13;
+  public static final int NUMERO = 16;
   public static final int DOSPUNTOS = 9;
+  public static final int MULTIPLICAR = 11;
+  public static final int CASO = 35;
+  public static final int CAMBIO = 36;
+  public static final int IGUALDOBLE = 28;
+  public static final int PUNTOYCOMA = 20;
+  public static final int ENTERO = 4;
+  public static final int SI = 22;
+  public static final int PARAR = 34;
   public static final int MENORIGUAL = 30;
   public static final int IGUAL = 27;
-  public static final int DECIMAL = 17;
-  public static final int LEER = 3;
-  public static final int POTENCIA = 14;
-  public static final int FLOTANTE = 5;
-  public static final int PARA = 24;
-  public static final int COMILLAS = 21;
-  public static final int ID = 18;
-  public static final int PARENTESISCERRADO = 8;
-  public static final int PARENTESISABIERTO = 7;
-  public static final int STRING = 6;
-  public static final int COMA = 10;
-  public static final int IGUALDOBLE = 28;
-  public static final int MAYOR = 25;
-  public static final int EOF = 0;
+  public static final int FINMIENTRAS = 37;
   public static final int SINO = 23;
-  public static final int MAYORIGUAL = 29;
-  public static final int SI = 22;
-  public static final int ESCRIBIR = 2;
-  public static final int error = 1;
-  public static final int NUMERO = 16;
-  public static final int DIAGONAL = 13;
+  public static final int PARENTESISCERRADO = 8;
   public static final int FINPARA = 32;
-  public static final int ENTERO = 4;
+  public static final int MIENTRAS = 38;
+  public static final int ESCRIBIR = 2;
+  public static final int ID = 18;
+  public static final int MAYORIGUAL = 29;
+  public static final int EOF = 0;
+  public static final int DECIMAL = 17;
+  public static final int COMILLAS = 21;
+  public static final int error = 1;
+  public static final int FINCASO = 33;
+  public static final int COMA = 10;
+  public static final int COMILLASTEXTO = 19;
+  public static final int MENOS = 12;
+  public static final int MENOR = 26;
+  public static final int MAYOR = 25;
+  public static final int POTENCIA = 14;
+  public static final int PARENTESISABIERTO = 7;
+  public static final int LEER = 3;
+  public static final int STRING = 6;
+  public static final int PARA = 24;
   public static final int FINSI = 31;
+  public static final int FLOTANTE = 5;
   public static final int MAS = 15;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -74,7 +80,13 @@ public class sym {
   "MAYORIGUAL",
   "MENORIGUAL",
   "FINSI",
-  "FINPARA"
+  "FINPARA",
+  "FINCASO",
+  "PARAR",
+  "CASO",
+  "CAMBIO",
+  "FINMIENTRAS",
+  "MIENTRAS"
   };
 }
 

@@ -26,6 +26,12 @@ SINO = "Sino"
 FINSI = "Finsi"
 PARA = "para"
 FINPARA = "finpara"
+CAMBIO = "cambio"
+CASO = "caso"
+PARAR = "parar"
+FINCASO = "finCaso"
+MIENTRAS = "mientras"
+FINMIENTRAS = "finMientras"
 PARENTESISABIERTO = "("
 PARENTESISCERRADO = ")"
 COMILLAS = "\""
@@ -64,6 +70,13 @@ menorIgual = [[IGUAL][MENOR]]|[[MENOR][IGUAL]]
 {SINO}             {System.out.println(yytext());return new Symbol(sym.SINO,yyline+1,yycolumn+1,yytext());}
 {PARA}             {System.out.println(yytext());return new Symbol(sym.PARA,yyline+1,yycolumn+1,yytext());}
 {FINPARA}             {System.out.println(yytext());return new Symbol(sym.FINPARA,yyline+1,yycolumn+1,yytext());}
+{CAMBIO}             {System.out.println(yytext());return new Symbol(sym.CAMBIO,yyline+1,yycolumn+1,yytext());}
+{CASO}             {System.out.println(yytext());return new Symbol(sym.CASO,yyline+1,yycolumn+1,yytext());}
+{PARAR}             {System.out.println(yytext());return new Symbol(sym.PARAR,yyline+1,yycolumn+1,yytext());}
+{FINCASO}             {System.out.println(yytext());return new Symbol(sym.FINCASO,yyline+1,yycolumn+1,yytext());}
+{MIENTRAS}             {System.out.println(yytext());return new Symbol(sym.MIENTRAS,yyline+1,yycolumn+1,yytext());}
+{FINMIENTRAS}             {System.out.println(yytext());return new Symbol(sym.FINMIENTRAS,yyline+1,yycolumn+1,yytext());}
+
 
 //  Escribir("hola");
 //agrupacion 

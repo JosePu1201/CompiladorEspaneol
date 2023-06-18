@@ -5,7 +5,9 @@ import java.util.*;
 parser code {:
         ArrayList<Variables> vars = new ArrayList<>();
         ArrayList  <String> salidas = new ArrayList<>();
-
+        boolean banderaInt = false;
+        boolean banderaFloat = false;
+        boolean banderaString = false;
         public void imprimir(){
                 for (String salida : salidas) {
                         System.out.println(salida);
@@ -101,24 +103,47 @@ public boolean existeVar(String var) {
     }
 
 :};
-//   
+
+
 terminal ESCRIBIR,LEER,ENTERO,FLOTANTE,STRING,PARENTESISABIERTO,PARENTESISCERRADO,DOSPUNTOS,COMA,MULTIPLICAR,MENOS,DIAGONAL,POTENCIA,MAS;
 terminal NUMERO,DECIMAL,ID,COMILLASTEXTO,PUNTOYCOMA,COMILLAS,SI,SINO,PARA,MAYOR,MENOR,IGUAL,IGUALDOBLE,MAYORIGUAL,MENORIGUAL,FINSI,FINPARA;
- 
-non terminal inicio, op,declaracion,declaracionigual,tipo,escribir,condicion,numero,si,resultado,sino,sinosi,for,ciclo,ope,operacion,asig;
-non terminal asig1,asig2,lect;
+terminal FINCASO, PARAR, CASO, CAMBIO,FINMIENTRAS,MIENTRAS;
 
-inicio  ::= ciclo {::}
+non terminal inicio, op,declaracion,declaracionigual,tipo,escribir,condicion,numero,si,resultado,sino,sinosi,for,ciclo,ope,operacion,asig;
+non terminal asig1,asig2,lect,casos,cambio,tipoEntrada,Mientras,ops;
+
+inicio  ::= ciclo:a {:System.out.println(a.toString());:}
         |
         ;
         
 
-ciclo   ::=    ciclo op:b  {:   if(b.toString() != ""){
+ciclo   ::=    ciclo:a op:b  {:   RESULT = a+b;if(b.toString() != ""){
                                 salidas.add(b.toString());}:}
-        |       op:b    {:if(b.toString() != ""){
+        |       op:b    {:RESULT = b;if(b.toString() != ""){
                                 salidas.add(b.toString());}:}
         
         ;
+
+/*ops ::= declaracion:a {:RESULT = a;:}
+    |   escribir:a {:RESULT = a;:}
+    |   si:a {:RESULT = a;:}
+    |   sinosi:a {:RESULT = a;:}
+    |   for:a {:RESULT = a;:}
+    |   asig:a {:RESULT = a;:}
+    |   lect:a {:RESULT = a;:}
+    |   cambio:a {:RESULT = a;:}
+    |   Mientras:a {:RESULT =a;:}
+    ;*/
+op  ::= declaracion:a {:RESULT = a;:}
+    |   escribir:a {:RESULT = a;:}
+    |   si:a {:RESULT = a;:}
+    |   sinosi:a {:RESULT = a;:}
+    |   for:a {:RESULT = a;:}
+    |   asig:a {:RESULT = a;:}
+    |   lect:a {:RESULT = a;:}
+    |   cambio:a {:RESULT = a;:}
+    |   Mientras:a {:RESULT =a;:}
+    ;
 
 /*                      Condiciones
 ---------------------------------------------------------------------*/
@@ -140,17 +165,8 @@ resultado       ::=     numero:a condicion:b numero:c {:RESULT = a.toString()+b.
 /*                      If
 --------------------------------------------------------------------*/
 
-si      ::=     SI PARENTESISABIERTO resultado:a PARENTESISCERRADO op:b FINSI{:RESULT = "if ("+a.toString()+"){\n"+b.toString()+"\n}";:}
+si      ::=     SI PARENTESISABIERTO resultado:a PARENTESISCERRADO ciclo:b FINSI{:RESULT = "if ("+a.toString()+"){\n"+b.toString()+"\n}";:}
         ;
-
-op  ::= declaracion:a {:RESULT = a;:}
-    |   escribir:a {:RESULT = a;:}
-    |   si:a {:RESULT = a;:}
-    |   sinosi:a {:RESULT = a;:}
-    |   for:a {:RESULT = a;:}
-    |   asig:a {:RESULT = a;:}
-    |   lect:a {:RESULT = a;:}
-    ;
 /*                      else
 --------------------------------------------------------------------*/
 sino    ::= SINO op:a FINSI{:RESULT = "else {\n"+a.toString()+"\n}";:}
@@ -217,3 +233,21 @@ operacion       ::=     numero:a ope:b numero:c {:RESULT = a.toString()+b.toStri
 ----------------------------------------------------------------------------*/
 lect    ::=     LEER PARENTESISABIERTO ID:a PARENTESISCERRADO PUNTOYCOMA {:RESULT = a.toString()+"="+"JOptionPane.showInputDialog(\"Ingresa el dato\");"; :}
         ;
+/*                      Caso
+----------------------------------------------------------------------------*/
+cambio  ::= CAMBIO PARENTESISABIERTO ID:a PARENTESISCERRADO casos:b FINCASO {:RESULT = "switch ("+a.toString()+"){\n"+b.toString()+"\n}"; System.out.println(b.toString());:}
+        ;
+
+casos   ::=     casos:a CASO tipoEntrada:b DOSPUNTOS op:c PARAR {:RESULT = a.toString()+"\n case "+b.toString()+":\n"+c.toString()+"\nbreak;";:}
+        |       CASO tipoEntrada:a DOSPUNTOS  op:b PARAR {:RESULT = "case "+ a.toString()+":\n"+b.toString()+"\nbreak;\n";:}
+        ;
+
+tipoEntrada ::= COMILLAS ID:a COMILLAS {:RESULT = a.toString();:}
+            |   numero:a {:RESULT = a.toString();:}
+            |   ID:a {:RESULT = a.toString();:}
+            ;
+
+/*                      Mientras
+-----------------------------------------------------------------------------*/
+Mientras    ::= MIENTRAS PARENTESISABIERTO resultado:a PARENTESISCERRADO op:b FINMIENTRAS {:RESULT = "while ("+a.toString()+"){\n"+b.toString()+"\n}";:}
+            ;
