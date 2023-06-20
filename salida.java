@@ -4,9 +4,75 @@ public class salida {
 public static void main(String [] args) {
  Scanner myObj = new Scanner(System.in);
 
-System.out.println(hola);
-if (5>8){
-System.out.println(hola);
+System.out.println("EstoEsUnaPrueba");
+
+System.out.println("Variables");
+int entero = 1;
+
+String string;
+double decimal = 22.5;
+
+System.out.println("Flotane");
+System.out.println(decimal);
+int entero2 = 5+5;
+
+System.out.println("numEntero");
+System.out.println(entero);
+System.out.println("Entero2");
+System.out.println(entero2);
+for(int i = 1; i<5; i++){
+System.out.println(entero2);
+
+entero2 = entero2+1;
+
 }
+System.out.println("Entero2");
+System.out.println(entero2);
+if (entero2<entero){
+System.out.println("EsMenor");
+
+}else {
+if (55>22){
+System.out.println("EsMayor");
+
+System.out.println("EsMayor");
+System.out.println("EsMayor");
+}
+
+}
+switch (entero2){
+case 1:
+System.out.println("hola");
+
+break;
+
+ case 2:
+System.out.println("hola");
+
+break;
+ case 3:
+System.out.println("hola");
+
+break;
+ case 44:
+System.out.println("hola");
+
+break;
+ case 14:
+for(int i = 1; i<20; i++){
+System.out.println("ESooo");
+
+}
+
+break;
+}
+while (entero2>5){
+System.out.println("While");
+
+entero2 = entero2-1;
+
+}
+System.out.println("Entero2Es");
+System.out.println(entero2);
 }
 }

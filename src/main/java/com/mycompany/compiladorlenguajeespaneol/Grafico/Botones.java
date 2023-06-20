@@ -23,13 +23,13 @@ import org.xml.sax.ext.LexicalHandler;
  * @author jose
  */
 public class Botones extends javax.swing.JPanel {
-
+    
     private panelPrincipal panel;
     private String salida;
 
     /**
-     * Creates new form Botones
-     * botones de aaccion para compilaa, ejecutar, limpiar pantalla y acerca de 
+     * Creates new form Botones botones de aaccion para compilaa, ejecutar,
+     * limpiar pantalla y acerca de
      */
     public Botones(panelPrincipal panel) {
         this.panel = panel;
@@ -102,7 +102,7 @@ public class Botones extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
     /*
     *Obtiene el tecto del area de texto en basa a las salidas del parser en caso de que no tenga ningun error
-    */
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String entrada = panel.getCentro().getEntrada().getText();
         StringReader lectrua = new StringReader(entrada);
@@ -113,28 +113,32 @@ public class Botones extends javax.swing.JPanel {
         } catch (Exception ex) {
             Logger.getLogger(Botones.class.getName()).log(Level.SEVERE, null, ex);
         }
-        salida = "import java.util.Scanner;\n"
-                + "import javax.swing.JOptionPane;\n"
-                + "public class salida {\n"
-                + "public static void main(String [] args) {\n"
-                + " Scanner myObj = new Scanner(System.in);\n";
-        for (String salida1 : nuevoparser.getSalidas()) {
-            salida = salida + "\n" + salida1;
+        if (!nuevoparser.getError()) {
+            salida = "import java.util.Scanner;\n"
+                    + "import javax.swing.JOptionPane;\n"
+                    + "public class salida {\n"
+                    + "public static void main(String [] args) {\n"
+                    + " Scanner myObj = new Scanner(System.in);\n";
+            for (String salida1 : nuevoparser.getSalidas()) {
+                salida = salida + "\n" + salida1;
+            }
+            salida = salida + "\n}\n}";
+            panel.getCentro().getTerminal().setText(salida);
+            crer(salida);
+        } else {
+            JOptionPane.showMessageDialog(null, "Ocurrio un error en la lectura del archivo");
         }
-        salida = salida + "\n}\n}";
-        panel.getCentro().getTerminal().setText(salida);
-        crer(salida);
     }//GEN-LAST:event_jButton1ActionPerformed
     /*
     *Limpa los dos areas de texto
-    */
+     */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         panel.getCentro().getTerminal().setText("");
         panel.getCentro().getEntrada().setText("");
     }//GEN-LAST:event_jButton3ActionPerformed
     /*
     *invoca los metodos de terminal para poder ejecutar desde la app
-    */
+     */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         comandos("javac", "salida.java");
         comandos("java", "salida");
@@ -142,7 +146,7 @@ public class Botones extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
     /*
     *Informacion a cerca del programa
-    */
+     */
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         String algo = "Espaneol\n"
                 + "El siguiente lenguaje esta creado\n"
@@ -171,15 +175,15 @@ public class Botones extends javax.swing.JPanel {
                 + "\tLeer(vaariableDondeGuardar);\n"
                 + "Para mas dudas o consultas consultar con el desarrollador\n"
                 + "E-mail: joseluis-pusam@cunoc.edu.gt";
-        JOptionPane.showMessageDialog(null, algo, "Acerca de",JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, algo, "Acerca de", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton4ActionPerformed
     /*
     *Comandos de ejecucion para la terminal
-    */
-    public void comandos(String primero,String segundo) {
+     */
+    public void comandos(String primero, String segundo) {
         try {
             // Comando a ejecutar
-            String[] command = {primero,segundo};
+            String[] command = {primero, segundo};
 
             // Crear el proceso
             ProcessBuilder pb = new ProcessBuilder(command);
@@ -193,22 +197,23 @@ public class Botones extends javax.swing.JPanel {
             // Leer la salida del proceso
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
-            panel.getCentro().getTerminal().append("\n----------"+primero+" "+segundo+"----------");
+            panel.getCentro().getTerminal().append("\n----------" + primero + " " + segundo + "----------");
             while ((line = reader.readLine()) != null) {
-                panel.getCentro().getTerminal().append("\n"+line);
+                panel.getCentro().getTerminal().append("\n" + line);
             }
-           panel.getCentro().getTerminal().append("\n");
+            panel.getCentro().getTerminal().append("\n");
             // Esperar a que el proceso termine
             int exitCode = process.waitFor();
             System.out.println("El proceso terminó con el código de salida: " + exitCode);
-
+            
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
+
     /*
     Creacion de los archivos .java previo a la eliminacion de los anteriores para evitar conflictos 
-    */
+     */
     public void crer(String entrada) {
         comandos("rm", "salida.java");
         comandos("rm", "salida.class");

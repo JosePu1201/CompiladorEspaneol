@@ -14,7 +14,7 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  */
 public class CompiladorLenguajeEspaneol {
 /*
-    Escribir("EstoEsUnaPrueba");
+ Escribir("EstoEsUnaPrueba");
 Escribir("Variables");
 Entero entero = 1;
 Texto string;
@@ -26,7 +26,8 @@ Escribir("numEntero");
 Escribir(entero);
 Escribir("Entero2");
 Escribir(entero2);
-para(1,5)
+para(1,5)	
+	Escribir(entero2);
 	entero2 = entero2 +1;
 finpara
 Escribir("Entero2");
@@ -36,9 +37,39 @@ Si( entero2 < entero )
 Finsi
 Sino
 	Si(55>22)
+	
 		Escribir("EsMayor");
+		Escribir("EsMayor");
+	Escribir("EsMayor");
 	Finsi
 Finsi
+
+cambio(entero2)
+caso 1:
+Escribir("hola");
+parar
+caso 2:
+Escribir("hola");
+parar
+caso 3:
+Escribir("hola");
+parar
+caso 44:
+Escribir("hola");
+parar
+caso 14:
+para(1,20)
+Escribir("ESooo");
+finpara
+parar
+
+finCaso
+mientras(entero2>5)
+	Escribir("While");
+	entero2 = entero2-1;
+finMientras	
+Escribir("Entero2Es");
+Escribir(entero2);
     */
     public static void main(String[] args) {
         /*
