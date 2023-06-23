@@ -15,7 +15,7 @@ import java_cup.runtime.XMLElement;
 %cup
 
 
-
+//palabras reservadas
 ESCRIBIR = "Escribir"
 LEER = "Leer"
 ENTERO = "Entero"
@@ -32,8 +32,13 @@ PARAR = "parar"
 FINCASO = "finCaso"
 MIENTRAS = "mientras"
 FINMIENTRAS = "finMientras"
+MAIN = "main"
+FUN = "Fun"
+PROS = "Pros"
 PARENTESISABIERTO = "("
 PARENTESISCERRADO = ")"
+LLAVEA = "{"
+LLAVEC = "}"
 COMILLAS = "\""
 DOSPUNTOS = ":"
 PUNTOYCOMA = ";"
@@ -76,13 +81,17 @@ menorIgual = [[IGUAL][MENOR]]|[[MENOR][IGUAL]]
 {FINCASO}             {System.out.println(yytext());return new Symbol(sym.FINCASO,yyline+1,yycolumn+1,yytext());}
 {MIENTRAS}             {System.out.println(yytext());return new Symbol(sym.MIENTRAS,yyline+1,yycolumn+1,yytext());}
 {FINMIENTRAS}             {System.out.println(yytext());return new Symbol(sym.FINMIENTRAS,yyline+1,yycolumn+1,yytext());}
+{FUN}                  {System.out.println(yytext());return new Symbol(sym.FUN,yyline+1,yycolumn+1,yytext());}
+{PROS}                  {System.out.println(yytext());return new Symbol(sym.PROS,yyline+1,yycolumn+1,yytext());}
+{MAIN}                  {System.out.println(yytext());return new Symbol(sym.MAIN,yyline+1,yycolumn+1,yytext());}
 
 
 //  Escribir("hola");
 //agrupacion 
 {PARENTESISABIERTO}                     {System.out.println(yytext());return new Symbol(sym.PARENTESISABIERTO,yyline+1,yycolumn+1,yytext());}
 {PARENTESISCERRADO}                     {System.out.println(yytext());return new Symbol(sym.PARENTESISCERRADO,yyline+1,yycolumn+1,yytext());}
-
+{LLAVEA}                                {System.out.println(yytext());return new Symbol(sym.LLAVEA,yyline+1,yycolumn+1,yytext());}
+{LLAVEC}                                {System.out.println(yytext());return new Symbol(sym.LLAVEC,yyline+1,yycolumn+1,yytext());}
 
 //signos 
 {COMILLAS}                      {System.out.println(yytext());return new Symbol(sym.COMILLAS,yyline+1,yycolumn+1,yytext());}

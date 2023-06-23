@@ -6,6 +6,7 @@ package com.mycompany.compiladorlenguajeespaneol.Grafico;
 
 import com.mycompany.compiladorlenguajeespaneol.Flex_Y_Cup.Lexer;
 import com.mycompany.compiladorlenguajeespaneol.Flex_Y_Cup.parser;
+import com.mycompany.compiladorlenguajeespaneol.Logica.ErrorSalida;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -116,17 +117,21 @@ public class Botones extends javax.swing.JPanel {
         if (!nuevoparser.getError()) {
             salida = "import java.util.Scanner;\n"
                     + "import javax.swing.JOptionPane;\n"
-                    + "public class salida {\n"
-                    + "public static void main(String [] args) {\n"
-                    + " Scanner myObj = new Scanner(System.in);\n";
+                    + "public class salida {\n";
+              
             for (String salida1 : nuevoparser.getSalidas()) {
                 salida = salida + "\n" + salida1;
             }
-            salida = salida + "\n}\n}";
+            salida = salida + "\n}";
             panel.getCentro().getTerminal().setText(salida);
             crer(salida);
         } else {
             JOptionPane.showMessageDialog(null, "Ocurrio un error en la lectura del archivo");
+            for (ErrorSalida errorSalida : nuevoparser.erroSalida) {
+                System.out.println(errorSalida.toString());
+                panel.getCentro().getTerminal().append("\n"+errorSalida.toString());
+            }
+            
         }
     }//GEN-LAST:event_jButton1ActionPerformed
     /*
@@ -142,6 +147,7 @@ public class Botones extends javax.swing.JPanel {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         comandos("javac", "salida.java");
         comandos("java", "salida");
+        
 
     }//GEN-LAST:event_jButton2ActionPerformed
     /*
@@ -180,6 +186,7 @@ public class Botones extends javax.swing.JPanel {
     /*
     *Comandos de ejecucion para la terminal
      */
+    // javac salida.java  java salida
     public void comandos(String primero, String segundo) {
         try {
             // Comando a ejecutar
@@ -199,7 +206,7 @@ public class Botones extends javax.swing.JPanel {
             String line;
             panel.getCentro().getTerminal().append("\n----------" + primero + " " + segundo + "----------");
             while ((line = reader.readLine()) != null) {
-                panel.getCentro().getTerminal().append("\n" + line);
+                panel.getCentro().getTerminal().append("\n  " + line);
             }
             panel.getCentro().getTerminal().append("\n");
             // Esperar a que el proceso termine

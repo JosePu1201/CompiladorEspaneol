@@ -22,11 +22,13 @@ public class sym {
   public static final int MENORIGUAL = 30;
   public static final int IGUAL = 27;
   public static final int FINMIENTRAS = 37;
+  public static final int FUN = 42;
   public static final int SINO = 23;
   public static final int PARENTESISCERRADO = 8;
   public static final int FINPARA = 32;
   public static final int MIENTRAS = 38;
   public static final int ESCRIBIR = 2;
+  public static final int MAIN = 43;
   public static final int ID = 18;
   public static final int MAYORIGUAL = 29;
   public static final int EOF = 0;
@@ -40,11 +42,14 @@ public class sym {
   public static final int MENOR = 26;
   public static final int MAYOR = 25;
   public static final int POTENCIA = 14;
+  public static final int PROS = 41;
   public static final int PARENTESISABIERTO = 7;
   public static final int LEER = 3;
   public static final int STRING = 6;
   public static final int PARA = 24;
   public static final int FINSI = 31;
+  public static final int LLAVEC = 39;
+  public static final int LLAVEA = 40;
   public static final int FLOTANTE = 5;
   public static final int MAS = 15;
   public static final String[] terminalNames = new String[] {
@@ -86,7 +91,12 @@ public class sym {
   "CASO",
   "CAMBIO",
   "FINMIENTRAS",
-  "MIENTRAS"
+  "MIENTRAS",
+  "LLAVEC",
+  "LLAVEA",
+  "PROS",
+  "FUN",
+  "MAIN"
   };
 }
 
