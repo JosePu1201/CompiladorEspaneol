@@ -6,6 +6,8 @@ parser code {:
         ArrayList<Variables> vars = new ArrayList<>();
         ArrayList  <String> salidas = new ArrayList<>();
         public ArrayList<ErrorSalida> erroSalida = new ArrayList<>();
+        private ArrayList<MetFun> metodosYFunciones = new ArrayList<>();
+        private ArrayList<Variables> parTemp = new ArrayList<>();
         boolean banderaInt = false;
         boolean banderaFloat = false;
         boolean banderaString = false;
@@ -19,9 +21,19 @@ parser code {:
                         System.out.println(salida);
                 }
         }
-public boolean existeVar(String var) {
+public boolean validaFun(String nombre){
+    boolean bandera = false;
+    for(MetFun s: metodosYFunciones){
+        if(s.getNombre().equals(nombre)){
+            bandera = true;
+            break;
+        }
+    }
+    return bandera;
+}
+public boolean existeVar(String var,ArrayList <Variables> vars1) {
         boolean bandera = false;
-        for (Variables var1 : vars) {
+        for (Variables var1 : vars1) {
             if (var.equals(var1.getNombre())) {
                 bandera = true;
                 break;
@@ -138,18 +150,27 @@ public boolean valTipo(String id,String tipo){
 
 terminal ESCRIBIR,LEER,ENTERO,FLOTANTE,STRING,PARENTESISABIERTO,PARENTESISCERRADO,DOSPUNTOS,COMA,MULTIPLICAR,MENOS,DIAGONAL,POTENCIA,MAS;
 terminal NUMERO,DECIMAL,ID,COMILLASTEXTO,PUNTOYCOMA,COMILLAS,SI,SINO,PARA,MAYOR,MENOR,IGUAL,IGUALDOBLE,MAYORIGUAL,MENORIGUAL,FINSI,FINPARA;
-terminal FINCASO, PARAR, CASO, CAMBIO,FINMIENTRAS,MIENTRAS,LLAVEC,LLAVEA,PROS,FUN,MAIN;
+terminal FINCASO, PARAR, CASO, CAMBIO,FINMIENTRAS,MIENTRAS,LLAVEC,LLAVEA,PROS,FUN,MAIN,RETORNO;
 
 non terminal inicio, op,declaracion,declaracionigual,tipo,escribir,condicion,numero,si,resultado,sino,sinosi,for,ciclo,ope,operacion,asig;
-non terminal asig1,asig2,lect,casos,cambio,tipoEntrada,Mientras,ops,main,proseso,argumentos;
+non terminal asig1,asig2,lect,casos,cambio,tipoEntrada,Mientras,ops,main,proseso,argumentos,funcion,retorno,eleccion,tipoFP,todo,llamaPros;
+non terminal parametros;
 
-inicio  ::= proseso:a {:System.out.println(a.toString());salidas.add(a.toString());:}
+inicio  ::= todo:a {:salidas.add(a.toString());:}
         |
         ;
-        
-/*ops ::= ops:a ciclo:b
-    |   ciclo:
-    ;*/
+
+
+todo    ::= eleccion:a main:b  {:RESULT = b.toString()+"\n"+a.toString();:}
+        |   main:a {:RESULT = a.toString();:}
+        ;
+
+eleccion    ::= eleccion:a tipoFP:b {:RESULT = a.toString()+"\n"+b.toString();:}
+            |   tipoFP:a {:RESULT = a.toString()+"\n"; :}
+            ;
+tipoFP    ::= funcion:a {:RESULT = a.toString();:}
+        |   proseso:a {:RESULT = a.toString();:}
+        ;
 ciclo   ::=    ciclo:a op:b  {:   RESULT = a.toString()+"\n"+b.toString();/*if(b.toString() != ""){
                                 salidas.add(b.toString());}*/:}
         |       op:b    {:RESULT = b.toString()+"\n";/*if(b.toString() != ""){
@@ -167,8 +188,26 @@ op  ::= declaracion:a {:RESULT = a;:}
     |   lect:a {:RESULT = a;:}
     |   cambio:a {:RESULT = a;:}
     |   Mientras:a {:RESULT =a;:}
+    |   llamaPros:a {:RESULT = a;:}
     ;
+/*                      Llamar proceso
+---------------------------------------------------------------------*/
 
+llamaPros   ::= PROS ID:a PARENTESISABIERTO parametros:b PARENTESISCERRADO PUNTOYCOMA {:RESULT = a.toString()+" ("+b.toString()+");";:}
+            ;
+parametros  ::= parametros:a COMA ID:b  {:if(existeVar(b.toString(),vars)){
+                                            RESULT = a.toString()+","+b.toString();
+                                        }else{
+                                            RESULT = "";
+                                            banderaError = true;
+                                        }:}
+            |   ID:a    {:if(existeVar(a.toString(),vars)){
+                            RESULT = a.toString();
+                        }else{
+                            RESULT = "";
+                            banderaError = true;
+                        }:}
+            ;
 /*                      Condiciones
 ---------------------------------------------------------------------*/
 condicion       ::=     MAYOR:a {:RESULT = a;:}
@@ -182,19 +221,19 @@ numero  ::=     NUMERO:a {:RESULT = a;:}
         ;
 
 resultado       ::=     numero:a condicion:b numero:c {:RESULT = a.toString()+b.toString()+c.toString();:}
-                |       ID:a condicion:b numero:c     {:    if(existeVar(a.toString())){
+                |       ID:a condicion:b numero:c     {:    if(existeVar(a.toString(),vars)){
                                                                 RESULT = a.toString()+b.toString()+c.toString();}
                                                             else{
                                                                 RESULT = "";
                                                                 banderaError = true;
                                                             }:}
-                |       numero:a condicion:b ID:c    {:    if(existeVar(c.toString())){
+                |       numero:a condicion:b ID:c    {:    if(existeVar(c.toString(),vars)){
                                                                 RESULT = a.toString()+b.toString()+c.toString();}
                                                             else{
                                                                 RESULT = "";
                                                                 banderaError = true;
                                                             }:}
-                |       ID:a condicion:b ID:c         {:    if(existeVar(a.toString()) && existeVar(c.toString())){
+                |       ID:a condicion:b ID:c         {:    if(existeVar(a.toString(),vars) && existeVar(c.toString(),vars)){
                                                                 RESULT = a.toString()+b.toString()+c.toString();}
                                                             else{
                                                                 RESULT = "";
@@ -217,7 +256,7 @@ sinosi  ::= si:a sino:b {:RESULT = a.toString()+b.toString();:}
 /*                      Delaraciones
 --------------------------------------------------------------------*/
 declaracion ::= tipo:a ID:b PUNTOYCOMA {:       
-                                                if(existeVar(b.toString())){
+                                                if(existeVar(b.toString(),vars)){
                                                         banderaError = true;
                                                         RESULT = "";
                                                 }
@@ -233,7 +272,7 @@ tipo    ::= ENTERO:a  {:RESULT = type(a.toString());:}
 /*                      Escribir
 ---------------------------------------------------------------------*/
 escribir    ::= ESCRIBIR PARENTESISABIERTO COMILLAS ID:a COMILLAS PARENTESISCERRADO PUNTOYCOMA{:RESULT = "System.out.println("+"\""+a.toString()+"\""+");";:}
-            |   ESCRIBIR PARENTESISABIERTO  ID:a  PARENTESISCERRADO PUNTOYCOMA{:    if(existeVar(a.toString())){
+            |   ESCRIBIR PARENTESISABIERTO  ID:a  PARENTESISCERRADO PUNTOYCOMA{:    if(existeVar(a.toString(),vars)){
                                                                                         RESULT = "System.out.println("+a.toString()+");";
                                                                                     }else{
                                                                                         RESULT = "";
@@ -246,7 +285,7 @@ for     ::=     PARA PARENTESISABIERTO NUMERO:num1 COMA NUMERO:num2 PARENTESISCE
         ;
 /*                      Asignacio
 -----------------------------------------------------------------------*/
-asig1   ::= tipo:a ID:b IGUAL{:if(existeVar(b.toString())){
+asig1   ::= tipo:a ID:b IGUAL{:if(existeVar(b.toString(),vars)){
                                                         banderaError = true;
                                                         RESULT = "";
                                                 }
@@ -256,7 +295,7 @@ asig1   ::= tipo:a ID:b IGUAL{:if(existeVar(b.toString())){
         ;
 asig2   ::=     ID:a IGUAL {:RESULT = a.toString();:}
         ;
-asig    ::=     asig2:a COMILLAS ID:b COMILLAS PUNTOYCOMA {:    if(existeVar(a.toString())){
+asig    ::=     asig2:a COMILLAS ID:b COMILLAS PUNTOYCOMA {:    if(existeVar(a.toString(),vars)){
                                                                     RESULT = a.toString()+" = "+"\""+b.toString()+"\""+";\n";}
                                                                 else{
                                                                     RESULT = "";
@@ -281,21 +320,21 @@ ope     ::=     MAS:a     {:RESULT = a.toString();:}
         ;
 
 operacion       ::=     numero:a ope:b numero:c {:RESULT = a.toString()+b.toString()+c.toString();:}
-                |       ID:a ope:b numero:c {:  if(existeVar(a.toString())){
+                |       ID:a ope:b numero:c {:  if(existeVar(a.toString(),vars)){
                                                     RESULT = a.toString()+b.toString()+c.toString();
                                                 }else{
                                                     banderaError = true;
                                                     erroSalida.add(new ErrorSalida(aleft,aright,"La variable: "+a.toString()+" no existe"));
                                                     RESULT = "";
                                                 }:}
-                |       numero:a ope:b ID:c {:  if(existeVar(c.toString())){
+                |       numero:a ope:b ID:c {:  if(existeVar(c.toString(),vars)){
                                                     RESULT = a.toString()+b.toString()+c.toString();
                                                 }else{
                                                     banderaError = true;
                                                     erroSalida.add(new ErrorSalida(cleft,cright,"La variable: "+c.toString()+" no existe"));
                                                     RESULT = "";
                                                 }:}
-                |       ID:a ope:b ID:c {:  if(existeVar(a.toString()) && existeVar(c.toString())){
+                |       ID:a ope:b ID:c {:  if(existeVar(a.toString(),vars) && existeVar(c.toString(),vars)){
                                                 RESULT = a.toString()+b.toString()+c.toString();
                                             }else{
                                                 banderaError = true;
@@ -305,7 +344,7 @@ operacion       ::=     numero:a ope:b numero:c {:RESULT = a.toString()+b.toStri
                 ;
 /*                      Leer
 ----------------------------------------------------------------------------*/
-lect    ::=     LEER PARENTESISABIERTO ID:a PARENTESISCERRADO PUNTOYCOMA {: if(existeVar(a.toString())){
+lect    ::=     LEER PARENTESISABIERTO ID:a PARENTESISCERRADO PUNTOYCOMA {: if(existeVar(a.toString(),vars)){
                                                                                 RESULT = a.toString()+"="+"JOptionPane.showInputDialog(\"Ingresa el dato\");";
                                                                             }else{
                                                                                 banderaError = true;
@@ -314,7 +353,7 @@ lect    ::=     LEER PARENTESISABIERTO ID:a PARENTESISCERRADO PUNTOYCOMA {: if(e
         ;
 /*                      Caso
 ----------------------------------------------------------------------------*/
-cambio  ::= CAMBIO PARENTESISABIERTO ID:a PARENTESISCERRADO LLAVEA casos:b LLAVEC {:if(existeVar(a.toString())){
+cambio  ::= CAMBIO PARENTESISABIERTO ID:a PARENTESISCERRADO LLAVEA casos:b LLAVEC {:if(existeVar(a.toString(),vars)){
                                                                                 RESULT = "switch ("+a.toString()+"){\n"+b.toString()+"\n}"; System.out.println(b.toString());
                                                                             }else{
                                                                                 banderaError =true;
@@ -328,7 +367,7 @@ casos   ::=     casos:a CASO tipoEntrada:b DOSPUNTOS ciclo:c PARAR {:RESULT = a.
 
 tipoEntrada ::= COMILLAS ID:a COMILLAS {:RESULT = "\""+a.toString()+"\""; :}
             |   numero:a {:RESULT = a.toString();:}
-            |   ID:a {:if(existeVar(a.toString())){
+            |   ID:a {:if(existeVar(a.toString(),vars)){
                 RESULT = a.toString();
                 }else{
                     banderaError = true;
@@ -347,12 +386,49 @@ main    ::= MAIN LLAVEA ciclo:a LLAVEC {:RESULT = "public static void main (Stri
         ;
 /*                      argumentos
 -------------------------------------------------------------------------------*/
-argumentos  ::= argumentos:a COMA tipo:b ID:c {:RESULT = a.toString()+","+b.toString()+" "+c.toString();:}
-            |   tipo:a ID:b {:RESULT = a.toString()+" "+b.toString();:}
+argumentos  ::= argumentos:a COMA tipo:b ID:c {:RESULT = a.toString()+","+b.toString()+" "+c.toString();
+                                                if(existeVar(c.toString(),parTemp)){
+                                                    banderaError = true;
+                                                    
+                                                }
+                                                else{
+                                                    parTemp.add(new Variables(c.toString(),b.toString()));
+                                                    vars.add(new Variables(c.toString(),b.toString()));
+                                                }:}
+            |   tipo:a ID:b {:  RESULT = a.toString()+" "+b.toString();
+                                if(existeVar(b.toString(),parTemp)){
+                                    banderaError = true;
+                                    
+                                }else{
+                                    parTemp.add(new Variables(b.toString(),a.toString()));
+                                    vars.add(new Variables(b.toString(),a.toString()));
+                                }:}
+                                                
             |   {:RESULT = "";:}
             ;
 /*                      Procedimiento
 ------------------------------------------------------------------------------*/
 
-proseso ::= PROS ID:a PARENTESISABIERTO argumentos:b PARENTESISCERRADO LLAVEA ciclo:c LLAVEC{:RESULT = "public static void "+a.toString()+"("+b.toString()+"){\n"+c.toString()+"\n}";:}
+proseso ::= PROS ID:a PARENTESISABIERTO argumentos:b PARENTESISCERRADO LLAVEA ciclo:c LLAVEC
+            {:
+            if(validaFun(a.toString())){
+                banderaError  = true;
+                RESULT = "";
+            }
+            else{
+                RESULT = "public static void "+a.toString()+"("+b.toString()+"){\n"+c.toString()+"\n}";
+                metodosYFunciones.add(new MetFun(false,a.toString())); 
+            }
+            vars.clear();
+            parTemp.clear();:}
+        ;
+
+/*                      Funcion
+------------------------------------------------------------------------------*/
+
+funcion ::= FUN tipo:a ID:b PARENTESISABIERTO argumentos:c PARENTESISCERRADO LLAVEA ciclo:d RETORNO ID:e PUNTOYCOMA  LLAVEC 
+{:RESULT = "public static "+a.toString()+" "+b.toString()+"("+c.toString()+"){\n"+d.toString()+"\nreturn "+e.toString()+";\n}";vars.clear();:}
+        ;
+
+retorno ::= RETORNO ID
         ;

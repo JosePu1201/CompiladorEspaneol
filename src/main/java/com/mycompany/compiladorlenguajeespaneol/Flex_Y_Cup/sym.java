@@ -29,6 +29,7 @@ public class sym {
   public static final int MIENTRAS = 38;
   public static final int ESCRIBIR = 2;
   public static final int MAIN = 43;
+  public static final int RETORNO = 44;
   public static final int ID = 18;
   public static final int MAYORIGUAL = 29;
   public static final int EOF = 0;
@@ -96,7 +97,8 @@ public class sym {
   "LLAVEA",
   "PROS",
   "FUN",
-  "MAIN"
+  "MAIN",
+  "RETORNO"
   };
 }
 

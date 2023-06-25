@@ -35,6 +35,7 @@ FINMIENTRAS = "finMientras"
 MAIN = "main"
 FUN = "Fun"
 PROS = "Pros"
+RETORNO = "RETORNAR"
 PARENTESISABIERTO = "("
 PARENTESISCERRADO = ")"
 LLAVEA = "{"
@@ -84,6 +85,7 @@ menorIgual = [[IGUAL][MENOR]]|[[MENOR][IGUAL]]
 {FUN}                  {System.out.println(yytext());return new Symbol(sym.FUN,yyline+1,yycolumn+1,yytext());}
 {PROS}                  {System.out.println(yytext());return new Symbol(sym.PROS,yyline+1,yycolumn+1,yytext());}
 {MAIN}                  {System.out.println(yytext());return new Symbol(sym.MAIN,yyline+1,yycolumn+1,yytext());}
+{RETORNO}                  {System.out.println(yytext());return new Symbol(sym.RETORNO,yyline+1,yycolumn+1,yytext());}
 
 
 //  Escribir("hola");
