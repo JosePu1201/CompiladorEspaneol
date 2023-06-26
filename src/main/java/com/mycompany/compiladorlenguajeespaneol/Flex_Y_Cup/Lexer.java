@@ -112,7 +112,7 @@ public class Lexer implements java_cup.runtime.Scanner {
     "\0\250\0\u0498\0\u04d0\0\u0508\0\u0540\0\u0578\0\u05b0\0\u05e8"+
     "\0\u0620\0\u0658\0\u0690\0\u06c8\0\u0700\0\u0738\0\u0770\0\u07a8"+
     "\0\u07e0\0\u0818\0\u0850\0\u0888\0\u08c0\0\u08f8\0\u0930\0\u0968"+
-    "\0\250\0\u09a0\0\u09d8\0\u0a10\0\u0a48\0\u0a80\0\70\0\u0ab8"+
+    "\0\250\0\u09a0\0\u09d8\0\u0a10\0\u0a48\0\u0a80\0\u0738\0\u0ab8"+
     "\0\u0af0\0\250\0\u0b28\0\250\0\u0b60\0\u0b98\0\u0bd0\0\u0c08"+
     "\0\u0c40\0\250\0\u0c78\0\u0cb0\0\u0ce8\0\250\0\250\0\u0d20"+
     "\0\u0d58\0\u0d90\0\u0dc8\0\u0e00\0\u0e38\0\u0e70\0\u0ea8\0\250"+
@@ -274,8 +274,7 @@ public class Lexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\1\11\17\1\21\11\23\1\1\0\20\1\1\11"+
-    "\65\1";
+    "\1\0\1\11\17\1\21\11\23\1\1\0\106\1";
 
   private static int [] zzUnpackAttribute() {
     int [] result = new int[124];
