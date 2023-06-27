@@ -441,6 +441,11 @@ public class parser extends java_cup.runtime.lr_parser {
                 }
             }
         }
+        public void imprimirFun(){
+            for(MetFun a : metodosYFunciones){
+                System.out.println(a.getNombre());
+            }
+        }
                public void error(){
                    try {
             throw new Exception("");
@@ -467,7 +472,10 @@ public class parser extends java_cup.runtime.lr_parser {
                     else{
                         System.out.println("diferente tamabneo");
                         bandera = false;
-                    }}}
+                    }
+                    System.out.println("Funcion o metodo encotnrado");
+                    }}
+        System.out.println("Respuesta de validar parametros: "+bandera);
         return bandera;
         }
 public boolean validaFun(String nombre){
@@ -475,6 +483,17 @@ public boolean validaFun(String nombre){
     for(MetFun s: metodosYFunciones){
         System.out.println(s.getNombre());
         if(s.getNombre().equals(nombre)){
+            bandera = true;
+            break;
+        }
+    }
+    return bandera;
+}
+public boolean validaFunF(String nombre){
+    boolean bandera = false;
+    for(MetFun s: metodosYFunciones){
+        System.out.println(s.getNombre());
+        if(s.getNombre().equals(nombre) && s.isIsFun()){
             bandera = true;
             break;
         }
@@ -945,7 +964,7 @@ class CUP$parser$actions {
 		int bleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int bright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		Object b = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		if(ValidarParametro(a.toString()) && validaFun(a.toString())){
+		if(ValidarParametro(a.toString()) && validaFunF(a.toString())){
                                                                                             RESULT = a.toString()+" ("+b.toString()+");";
                                                                                         }else{
                                                                                             banderaError = true;
@@ -1942,7 +1961,7 @@ class CUP$parser$actions {
 		 
         if(!validaFun(b.toString()) && mismoTipo(a.toString(),e.toString(),vars)){
             RESULT = "public static "+a.toString()+" "+b.toString()+"("+c.toString()+"){\n"+d.toString()+"\nreturn "+e.toString()+";\n}";
-            MetFun temp = new MetFun(true,a.toString());
+            MetFun temp = new MetFun(true,b.toString());
             temp.setTipo(a.toString());
             ArrayList <Variables> otro = new ArrayList<>();
             for(Variables var:parTemp){
@@ -1950,7 +1969,9 @@ class CUP$parser$actions {
             }
             temp.setVariables(otro);
             System.out.println("Entra en el aceptar de la funcion?");
+            imprimirFun();
             metodosYFunciones.add(temp); 
+            imprimirFun();
         }
         else{
             banderaError = true;
