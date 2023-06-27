@@ -1,122 +1,4 @@
-Pros metodo (Texto algo,Entero asd, flotante cosas){    
-    Escribir("EstoEsUnaPrueba");
-    Entero entero = 1;
-    Texto string;
-    flotante decimal = 22.5;
-    Escribir(decimal);
-    Entero entero2 = 5+5;
-    Escribir("numEntero");
-    Escribir(entero);
-    Escribir("Entero2");
-    Escribir(entero2);
-
-    para(1,5) {	
-	    Escribir(entero2);
-	    entero2 = entero2 +1;
-    }
-
-    Escribir("Entero2");
-    Escribir(entero2);
-    Si( entero2 < entero ){
-	    Escribir("EsMenor");
-    }
-    Sino{
-	    Si(55>22){
-	
-		    Escribir("EsMayor");
-		    Escribir("EsMayor");
-	        Escribir("EsMayor");
-	    }
-    }
-
-    cambio(entero2){
-        caso 1:
-            Escribir("hola");
-            parar
-        caso 2:
-            Escribir("hola");
-            parar
-        caso 3:
-            Escribir("hola");
-            parar
-        caso 44:
-            Escribir("hola");
-            parar
-        caso 14:
-            para(1,20){
-            Escribir("ESooo");
-            }
-            parar
-    }
-    mientras(entero2>5){
-        Escribir("While");
-        entero2 = entero2-1;
-    }	
-
-    Escribir("Entero2Es");
-    Escribir(entero2);
-}
-
 Fun Entero metodo (Texto algo,Entero asd, flotante cosas){    
-    Escribir("EstoEsUnaPrueba");
-    Entero entero = 1;
-    Texto string;
-    flotante decimal = 22.5;
-    Escribir(decimal);
-    Entero entero2 = 5+5;
-    Escribir("numEntero");
-    Escribir(entero);
-    Escribir("Entero2");
-    Escribir(entero2);
-
-    para(1,5) {	
-	    Escribir(entero2);
-	    entero2 = entero2 +1;
-    }
-
-    Escribir("Entero2");
-    Escribir(entero2);
-    Si( entero2 < entero ){
-	    Escribir("EsMenor");
-    }
-    Sino{
-	    Si(55>22){
-	
-		    Escribir("EsMayor");
-		    Escribir("EsMayor");
-	        Escribir("EsMayor");
-	    }
-    }
-
-    cambio(entero2){
-        caso 1:
-            Escribir("hola");
-            parar
-        caso 2:
-            Escribir("hola");
-            parar
-        caso 3:
-            Escribir("hola");
-            parar
-        caso 44:
-            Escribir("hola");
-            parar
-        caso 14:
-            para(1,20){
-            Escribir("ESooo");
-            }
-            parar
-    }
-    mientras(entero2>5){
-        Escribir("While");
-        entero2 = entero2-1;
-    }	
-
-    Escribir("Entero2Es");
-    Escribir(entero2);
-    RETORNAR entero2;
-}
-main{    
     Escribir("EstoEsUnaPrueba");
     Entero entero = 1;
     Texto string;
@@ -173,4 +55,22 @@ main{
 
     Escribir("Entero2Es");
     Escribir(entero2);
+    RETORNAR entero2;
+}
+
+Pros procedimiento (){    
+    Escribir("EstoEsUnProcedimiento");
+    Escribir("LaSumaDeLosDosEnteroEs");
+   
+    
+}
+
+
+main{    
+    Escribir("EstoEsUnaPruebaMain");
+    Entero entero = 1;
+    Entero entero2 = 5+5;
+    flotante decimal = 222.5;
+    Pros procedimiento();
+    
 }

@@ -112,7 +112,8 @@ public class Botones extends javax.swing.JPanel {
         try {
             nuevoparser.parse();
         } catch (Exception ex) {
-            Logger.getLogger(Botones.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(Botones.class.getName()).log(Level.SEVERE, null, ex);
+           
         }
         if (!nuevoparser.getError()) {
             salida = "import java.util.Scanner;\n"
@@ -126,12 +127,12 @@ public class Botones extends javax.swing.JPanel {
             panel.getCentro().getTerminal().setText(salida);
             crer(salida);
         } else {
-            JOptionPane.showMessageDialog(null, "Ocurrio un error en la lectura del archivo");
+            JOptionPane.showMessageDialog(null, "Ocurrio un error en la lectura del archivo"); 
+             panel.getCentro().getTerminal().setText("");
             for (ErrorSalida errorSalida : nuevoparser.erroSalida) {
                 System.out.println(errorSalida.toString());
                 panel.getCentro().getTerminal().append("\n"+errorSalida.toString());
             }
-            
         }
     }//GEN-LAST:event_jButton1ActionPerformed
     /*

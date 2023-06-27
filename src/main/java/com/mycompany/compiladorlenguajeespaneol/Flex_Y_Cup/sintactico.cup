@@ -8,10 +8,12 @@ parser code {:
         public ArrayList<ErrorSalida> erroSalida = new ArrayList<>();
         private ArrayList<MetFun> metodosYFunciones = new ArrayList<>();
         private ArrayList<Variables> parTemp = new ArrayList<>();
+        private ArrayList<Variables> parTemp1 = new ArrayList<>();
         boolean banderaInt = false;
         boolean banderaFloat = false;
         boolean banderaString = false;
         boolean banderaError = false;
+        String temporal = "";
 
         public  boolean getError(){
             return banderaError;
@@ -21,9 +23,48 @@ parser code {:
                         System.out.println(salida);
                 }
         }
+
+        public void agregarATemp(String id){
+            for(Variables var: vars){
+                if(var.getNombre().equals(id)){
+                    parTemp1.add(var);
+                    break;
+                }
+            }
+        }
+               public void error(){
+                   try {
+            throw new Exception("");
+     } catch (Exception ex) {
+         //Logger.getLogger(parser.class.getName()).log(Level.SEVERE, null, ex);
+     }}
+ public boolean ValidarParametro(String idFun){
+            boolean bandera = true;
+            for(MetFun fun : metodosYFunciones){
+                if(fun.getNombre().equals(idFun)){
+                    if(fun.getVariables().size() == parTemp1.size()){
+                        System.out.println("Mismo tamabneo");
+                        for (int i = 0; i < fun.getVariables().size(); i++) {
+                            
+                            if(fun.getVariables().get(i).getTipo().equals(parTemp1.get(i).getTipo())){
+                                erroSalida.add(new ErrorSalida(0,0,"Los tipos de variable no coinciden"));
+                            error();
+                            }
+                            else{
+                                bandera = false;
+                            }
+                        }
+                    }
+                    else{
+                        System.out.println("diferente tamabneo");
+                        bandera = false;
+                    }}}
+        return bandera;
+        }
 public boolean validaFun(String nombre){
     boolean bandera = false;
     for(MetFun s: metodosYFunciones){
+        System.out.println(s.getNombre());
         if(s.getNombre().equals(nombre)){
             bandera = true;
             break;
@@ -31,10 +72,10 @@ public boolean validaFun(String nombre){
     }
     return bandera;
 }
-public boolean existeVar(String var,ArrayList <Variables> vars1) {
+public boolean existeVar(String var,ArrayList <Variables> variables) {
         boolean bandera = false;
-        for (Variables var1 : vars1) {
-            if (var.equals(var1.getNombre())) {
+        for (Variables vars : variables) {
+            if (var.equals(vars.getNombre())) {
                 bandera = true;
                 break;
             }
@@ -171,26 +212,46 @@ op  ::= declaracion:a {:RESULT = a;:}
 /*                      Llamar proceso
 ---------------------------------------------------------------------*/
 
-llamaPros   ::= PROS ID:a PARENTESISABIERTO parametros:b PARENTESISCERRADO PUNTOYCOMA {:RESULT = a.toString()+" ("+b.toString()+");";:}
+llamaPros   ::= PROS ID:a PARENTESISABIERTO parametros:b PARENTESISCERRADO PUNTOYCOMA {:if(ValidarParametro(a.toString()) && validaFun(a.toString())){
+                                                                                            RESULT = a.toString()+" ("+b.toString()+");";
+                                                                                        }else{
+                                                                                            banderaError = true;
+                                                                                            erroSalida.add(new ErrorSalida(bleft,bright,"Ocurrio un error con: "+a.toString()+""));
+                                                                                            error();
+                                                                                        }
+                                                                                        parTemp1.clear();:}
             ;
 parametros  ::= parametros:a COMA ID:b  {:if(existeVar(b.toString(),vars)){
                                             RESULT = a.toString()+","+b.toString();
+                                            agregarATemp(b.toString());
                                         }else{
                                             RESULT = "";
                                             banderaError = true;
+                                            erroSalida.add(new ErrorSalida(bleft,bright,"La variable: "+b.toString()+" no existe"));
+                                            error();
                                         }:}
             |   ID:a    {:if(existeVar(a.toString(),vars)){
                             RESULT = a.toString();
+                            agregarATemp(a.toString());
                         }else{
                             RESULT = "";
                             banderaError = true;
+                            erroSalida.add(new ErrorSalida(aleft,aright,"La variable: "+a.toString()+" no existe"));
+                            error();
                         }:}
             |   {:RESULT = "";:}
             ;
 /*                      Llamar Funcion
 ---------------------------------------------------------------------*/
 
-llamarFun   ::= FUN ID:a PARENTESISABIERTO parametros:b PARENTESISCERRADO PUNTOYCOMA {:RESULT = a.toString()+" ("+b.toString()+");";:}
+llamarFun   ::= FUN ID:a PARENTESISABIERTO parametros:b PARENTESISCERRADO PUNTOYCOMA {:if(ValidarParametro(a.toString()) && validaFun(a.toString())){
+                                                                                            RESULT = a.toString()+" ("+b.toString()+");";
+                                                                                        }else{
+                                                                                            banderaError = true;
+                                                                                            erroSalida.add(new ErrorSalida(bleft,bright,"Ocurrio un error con: "+a.toString()+""));
+                                                                                            error();
+                                                                                        }
+                                                                                        parTemp1.clear();:}
             ;
 
 /*                      Condiciones
@@ -211,18 +272,24 @@ resultado       ::=     numero:a condicion:b numero:c {:RESULT = a.toString()+b.
                                                             else{
                                                                 RESULT = "";
                                                                 banderaError = true;
+                                                                erroSalida.add(new ErrorSalida(aleft,aright,"La variable: "+a.toString()+" no existe"));
+                                                                error();
                                                             }:}
                 |       numero:a condicion:b ID:c    {:    if(existeVar(c.toString(),vars)){
                                                                 RESULT = a.toString()+b.toString()+c.toString();}
                                                             else{
                                                                 RESULT = "";
                                                                 banderaError = true;
+                                                                erroSalida.add(new ErrorSalida(cleft,cright,"La variable: "+c.toString()+" no existe"));
+                                                                error();
                                                             }:}
                 |       ID:a condicion:b ID:c         {:    if(existeVar(a.toString(),vars) && existeVar(c.toString(),vars)){
                                                                 RESULT = a.toString()+b.toString()+c.toString();}
                                                             else{
                                                                 RESULT = "";
                                                                 banderaError = true;
+                                                                erroSalida.add(new ErrorSalida(aleft,aright,"Una de las variables no existe "));
+                                                                error();
                                                             }:}
                 ;
 /*                      If
@@ -244,6 +311,8 @@ declaracion ::= tipo:a ID:b PUNTOYCOMA {:
                                                 if(existeVar(b.toString(),vars)){
                                                         banderaError = true;
                                                         RESULT = "";
+                                                        erroSalida.add(new ErrorSalida(bleft,bright,"La variable: "+b.toString()+" ya existe"));
+                                                        error();
                                                 }
                                                 else{
                                                 vars.add(new Variables(b.toString(),a.toString()));
@@ -262,6 +331,8 @@ escribir    ::= ESCRIBIR PARENTESISABIERTO COMILLAS ID:a COMILLAS PARENTESISCERR
                                                                                     }else{
                                                                                         RESULT = "";
                                                                                         banderaError = true;
+                                                                                        erroSalida.add(new ErrorSalida(aleft,aright,"La variable: "+a.toString()+" no existe"));
+                                                                                        error();
                                                                                     }:}
             ;
 /*                      For
@@ -273,6 +344,8 @@ for     ::=     PARA PARENTESISABIERTO NUMERO:num1 COMA NUMERO:num2 PARENTESISCE
 asig1   ::= tipo:a ID:b IGUAL{:if(existeVar(b.toString(),vars)){
                                                         banderaError = true;
                                                         RESULT = "";
+                                                        erroSalida.add(new ErrorSalida(bleft,bright,"La variable: "+b.toString()+" ya existe"));
+                                                        error();
                                                 }
                                                 else{
                                                 vars.add(new Variables(b.toString(),a.toString()));
@@ -285,14 +358,96 @@ asig    ::=     asig2:a COMILLAS ID:b COMILLAS PUNTOYCOMA {:    if(existeVar(a.t
                                                                 else{
                                                                     RESULT = "";
                                                                     banderaError = true;
-                                                                    erroSalida.add(new ErrorSalida(bleft,bright,"La variable: "+a.toString()+" no existe"));
+                                                                    erroSalida.add(new ErrorSalida(bleft,bright,"La variable: "+b.toString()+" no existe"));
+                                                                    error();
                                                                 }:}
-        |       asig2:a numero:b PUNTOYCOMA {:RESULT = a.toString()+" = "+b.toString()+";\n"; :}
-        |       asig2:a operacion:b PUNTOYCOMA {:RESULT = a.toString()+" = "+b.toString()+";\n";:}
-        |       asig2:a llamarFun:b {:RESULT = a.toString()+" = "+b.toString()+"\n";:}                                          
-        |       asig1:a numero:b PUNTOYCOMA {:RESULT = a.toString()+" = "+b.toString()+";\n"; :}
-        |       asig1:a operacion:b PUNTOYCOMA {:RESULT = a.toString()+" = "+b.toString()+";\n"; :}
-        |       asig1:a ID:b PUNTOYCOMA {:RESULT = a.toString()+" = "+b.toString()+";\n"; :}
+        |       asig2:a numero:b PUNTOYCOMA {:  if(existeVar(a.toString(),vars)){
+                                                    RESULT = a.toString()+" = "+b.toString()+";\n";
+                                                }else{
+                                                    RESULT = "";
+                                                    banderaError = true;
+                                                    erroSalida.add(new ErrorSalida(aleft,aright,"La variable: "+a.toString()+" no existe"));
+                                                    error();
+                                                } :}
+        |       asig2:a operacion:b PUNTOYCOMA {:   if(existeVar(a.toString(),vars)){
+                                                        RESULT = a.toString()+" = "+b.toString()+";\n";
+                                                    }else{
+                                                        RESULT = "";
+                                                        banderaError = true;
+                                                        erroSalida.add(new ErrorSalida(aleft,aright,"La variable: "+a.toString()+" no existe"));
+                                                    } :}
+        |       asig2:a llamarFun:b {:  if(existeVar(a.toString(),vars)){
+                                            RESULT = a.toString()+" = "+b.toString()+";\n";
+                                        }else{
+                                            RESULT = "";
+                                            banderaError = true;
+                                            erroSalida.add(new ErrorSalida(aleft,aright,"La variable: "+a.toString()+" no existe"));
+                                            error();
+                                        } :}                                
+        |       tipo:a ID:b IGUAL numero:c PUNTOYCOMA {:    if(existeVar(b.toString(),vars)){
+                                                                banderaError  = true;
+                                                                RESULT = "";
+                                                                erroSalida.add(new ErrorSalida(bleft,bright,"La variable: "+b.toString()+" ya existe"));
+                                                                error();
+                                                            }else{
+                                                                if(a.toString().equals("int") || a.toString().equals("double")){
+                                                                    RESULT = a.toString()+" "+b.toString()+" = "+c.toString()+";\n";
+                                                                    vars.add(new Variables(b.toString(),a.toString())); 
+                                                                }
+                                                                else{
+                                                                    banderaError = true;
+                                                                    RESULT = "";
+                                                                    erroSalida.add(new ErrorSalida(aleft,aright,"Los tipos son diferentes"));
+                                                                    error();
+                                                                    }
+                                                            }:}                                              
+        |       tipo:a ID:b IGUAL operacion:c PUNTOYCOMA {:    if(existeVar(b.toString(),vars)){
+                                                                banderaError  = true;
+                                                                RESULT = "";
+                                                                erroSalida.add(new ErrorSalida(bleft,bright,"La variable: "+b.toString()+" ya existe"));
+                                                                error();
+                                                            }else{
+                                                                if(a.toString().equals("int") || a.toString().equals("double")){
+                                                                    RESULT = a.toString()+" "+b.toString()+" = "+c.toString()+";\n"; 
+                                                                    vars.add(new Variables(b.toString(),a.toString()));
+                                                                }
+                                                                else{
+                                                                    banderaError = true;
+                                                                    RESULT = "";
+                                                                    erroSalida.add(new ErrorSalida(bleft,bright,"los tipos son diferentes"));
+                                                                    error();
+                                                                    }
+                                                            }:} 
+        |       tipo:a ID:b IGUAL ID:c PUNTOYCOMA {:    if(existeVar(b.toString(),vars)){
+                                                                banderaError  = true;
+                                                                RESULT = "";
+                                                                erroSalida.add(new ErrorSalida(bleft,bright,"La variable: "+b.toString()+" ya existe"));
+                                                                error();
+                                                            }else{
+                                                                if(a.toString().equals("String")){
+                                                                    RESULT = a.toString()+" "+b.toString()+" = "+c.toString()+";\n";
+                                                                    vars.add(new Variables(b.toString(),a.toString())); 
+                                                                    
+                                                                }
+                                                                else{
+                                                                    banderaError = true;
+                                                                    RESULT = "";
+                                                                    erroSalida.add(new ErrorSalida(bleft,bright,"Los tipos no son adecuados"));
+                                                                    error();
+                                                                    }
+                                                            }:}
+        |       tipo:a ID:b IGUAL llamarFun:c {:    if(existeVar(b.toString(),vars)){
+                                                                banderaError  = true;
+                                                                RESULT = "";
+                                                                erroSalida.add(new ErrorSalida(bleft,bright,"La variable: "+b.toString()+" ya existe"));
+                                                                error();
+                                                            }else{
+                                                                
+                                                                    RESULT = a.toString()+" "+b.toString()+" = "+c.toString()+";\n";
+                                                                    vars.add(new Variables(b.toString(),a.toString())); 
+
+                                                                   
+                                                            }:} 
         ;
         //|       asig2:a operacion:b{:RESULT = a.toString()+" = "+b.toString()+"\n"; :}
         
@@ -311,21 +466,25 @@ operacion       ::=     numero:a ope:b numero:c {:RESULT = a.toString()+b.toStri
                                                 }else{
                                                     banderaError = true;
                                                     erroSalida.add(new ErrorSalida(aleft,aright,"La variable: "+a.toString()+" no existe"));
+                                                    error();
                                                     RESULT = "";
+                                                    
                                                 }:}
                 |       numero:a ope:b ID:c {:  if(existeVar(c.toString(),vars)){
                                                     RESULT = a.toString()+b.toString()+c.toString();
                                                 }else{
                                                     banderaError = true;
-                                                    erroSalida.add(new ErrorSalida(cleft,cright,"La variable: "+c.toString()+" no existe"));
                                                     RESULT = "";
+                                                    erroSalida.add(new ErrorSalida(cleft,cright,"La variable: "+c.toString()+" no existe"));
+                                                    error();
                                                 }:}
                 |       ID:a ope:b ID:c {:  if(existeVar(a.toString(),vars) && existeVar(c.toString(),vars)){
                                                 RESULT = a.toString()+b.toString()+c.toString();
                                             }else{
                                                 banderaError = true;
-                                                erroSalida.add(new ErrorSalida(cleft,cright,"Alguna de las variables no existe"));
                                                 RESULT = "";
+                                                erroSalida.add(new ErrorSalida(bleft,bright,"Una de las variables no existe"));
+                                                error();
                                             }:}
                 ;
 /*                      Leer
@@ -335,6 +494,8 @@ lect    ::=     LEER PARENTESISABIERTO ID:a PARENTESISCERRADO PUNTOYCOMA {: if(e
                                                                             }else{
                                                                                 banderaError = true;
                                                                                 RESULT = "";
+                                                                                erroSalida.add(new ErrorSalida(aleft,aright,"La variable: "+a.toString()+" no existe"));
+                                                                                error();
                                                                             } :}
         ;
 /*                      Caso
@@ -344,6 +505,8 @@ cambio  ::= CAMBIO PARENTESISABIERTO ID:a PARENTESISCERRADO LLAVEA casos:b LLAVE
                                                                             }else{
                                                                                 banderaError =true;
                                                                                 RESULT = "";
+                                                                                erroSalida.add(new ErrorSalida(aleft,aright,"La variable: "+a.toString()+" no existe"));
+                                                                                error();
                                                                             }:}
         ;
 
@@ -358,6 +521,8 @@ tipoEntrada ::= COMILLAS ID:a COMILLAS {:RESULT = "\""+a.toString()+"\""; :}
                 }else{
                     banderaError = true;
                     RESULT = "";
+                    erroSalida.add(new ErrorSalida(aleft,aright,"La variable: "+a.toString()+" no existe"));
+                    error();
                 }:}
             ;
 
@@ -375,7 +540,8 @@ main    ::= MAIN LLAVEA ciclo:a LLAVEC {:RESULT = "public static void main (Stri
 argumentos  ::= argumentos:a COMA tipo:b ID:c {:RESULT = a.toString()+","+b.toString()+" "+c.toString();
                                                 if(existeVar(c.toString(),parTemp)){
                                                     banderaError = true;
-                                                    
+                                                    erroSalida.add(new ErrorSalida(cleft,cright,"La variable: "+c.toString()+" ya existe"));
+                                                    error();
                                                 }
                                                 else{
                                                     parTemp.add(new Variables(c.toString(),b.toString()));
@@ -384,7 +550,8 @@ argumentos  ::= argumentos:a COMA tipo:b ID:c {:RESULT = a.toString()+","+b.toSt
             |   tipo:a ID:b {:  RESULT = a.toString()+" "+b.toString();
                                 if(existeVar(b.toString(),parTemp)){
                                     banderaError = true;
-                                    
+                                    erroSalida.add(new ErrorSalida(bleft,bright,"La variable: "+b.toString()+" ya existe"));
+                                    error();
                                 }else{
                                     parTemp.add(new Variables(b.toString(),a.toString()));
                                     vars.add(new Variables(b.toString(),a.toString()));
@@ -400,10 +567,18 @@ proseso ::= PROS ID:a PARENTESISABIERTO argumentos:b PARENTESISCERRADO LLAVEA ci
             if(validaFun(a.toString())){
                 banderaError  = true;
                 RESULT = "";
+                erroSalida.add(new ErrorSalida(aleft,aright,"El procedimiento: "+a.toString()+" ya existe"));
+                error();
             }
             else{
                 RESULT = "public static void "+a.toString()+"("+b.toString()+"){\n"+c.toString()+"\n}";
-                metodosYFunciones.add(new MetFun(false,a.toString())); 
+                MetFun temp = new MetFun(false,a.toString());
+                ArrayList <Variables> otro = new ArrayList<>();
+                for(Variables var:parTemp){
+                    otro.add(var);
+                }
+                temp.setVariables(otro);
+                metodosYFunciones.add(temp); 
             }
             vars.clear();
             parTemp.clear();:}
@@ -416,13 +591,24 @@ funcion ::= FUN tipo:a ID:b PARENTESISABIERTO argumentos:c PARENTESISCERRADO LLA
     {: 
         if(!validaFun(b.toString()) && mismoTipo(a.toString(),e.toString(),vars)){
             RESULT = "public static "+a.toString()+" "+b.toString()+"("+c.toString()+"){\n"+d.toString()+"\nreturn "+e.toString()+";\n}";
-            vars.clear();
-            parTemp.clear();
+            MetFun temp = new MetFun(true,a.toString());
+            temp.setTipo(a.toString());
+            ArrayList <Variables> otro = new ArrayList<>();
+            for(Variables var:parTemp){
+                otro.add(var);
+            }
+            temp.setVariables(otro);
+            System.out.println("Entra en el aceptar de la funcion?");
+            metodosYFunciones.add(temp); 
         }
         else{
             banderaError = true;
             RESULT = "";
+            erroSalida.add(new ErrorSalida(bleft,bright,"La funcion: "+b.toString()+" ya existe"));
+            error();
         }
+        vars.clear();
+        parTemp.clear();
         :}
         ;
 
