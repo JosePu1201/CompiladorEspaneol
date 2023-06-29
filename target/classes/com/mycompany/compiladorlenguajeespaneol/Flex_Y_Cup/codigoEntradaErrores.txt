@@ -27,7 +27,7 @@ Fun Texto stringSalida(Texto a, Texto b){
     RETORNAR algo;
 }
 
-Pros Ciclos(){
+Pros saludo(){
     Escribir("Esto es una prueba con ciclos");
     Entero entero = 22;
     Escribir("Ciclo for \n");
@@ -46,6 +46,7 @@ Pros Ciclos(){
     }
 }
 Pros saludo(){
+    nuevo = 5 +5 ;
     Escribir("Hola mucho gusto");
 }
 Pros saludoNombre(Texto nombre, Texto apellidos){

@@ -59,7 +59,7 @@ WhiteSpace = {LineTerminator}|[ \t\f]|[" "]
 entero = 0|[1-9][0-9]*
 decimal = {entero}\.\d+
 id = [a-zA-Z][a-zA-Z|0-9]*
-textoPlano = [^\n]
+textoPlano = {COMILLAS} [^\n]* {COMILLAS}
 igualDoble = [IGUAL][IGUAL]
 mayorIgual = [[IGUAL][MAYOR]]|[[MAYOR][IGUAL]]
 menorIgual = [[IGUAL][MENOR]]|[[MENOR][IGUAL]]
@@ -115,9 +115,10 @@ menorIgual = [[IGUAL][MENOR]]|[[MENOR][IGUAL]]
 
 
 //reglas lexicas 
-{entero}               {System.out.println(yytext());return new Symbol(sym.NUMERO,yyline+1,yycolumn+1,yytext());}
-{decimal}               {System.out.println(yytext());return new Symbol(sym.DECIMAL,yyline+1,yycolumn+1,yytext());}
-{id}                    {System.out.println(yytext());return new Symbol(sym.ID,yyline+1,yycolumn+1,yytext());}
+{entero}                    {System.out.println(yytext());return new Symbol(sym.NUMERO,yyline+1,yycolumn+1,yytext());}
+{decimal}                   {System.out.println(yytext());return new Symbol(sym.DECIMAL,yyline+1,yycolumn+1,yytext());}
+{id}                        {System.out.println(yytext());return new Symbol(sym.ID,yyline+1,yycolumn+1,yytext());}
+{textoPlano}                {System.out.println(yytext());return new Symbol(sym.COMILLASTEXTO,yyline+1,yycolumn+1,yytext());}
 {WhiteSpace}            {}
 
 [^]                     {/*return new SYMBOL(sym.ERROR,yyline,yycolumn,yytext());*/}//Expresion regular de erro

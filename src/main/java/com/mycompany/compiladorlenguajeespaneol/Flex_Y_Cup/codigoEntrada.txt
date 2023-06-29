@@ -1,27 +1,93 @@
-Fun Entero metodo (Entero asd){    
+Fun Entero metodo (Entero asd){
+    Escribir("Esto es una prueba de una funcion");    
     Entero nuevo = asd +22;
+    Escribir("El resultado de la suma es:");
+    Escribir(nuevo);
     RETORNAR nuevo;
 }
-Pros procedimiento (Entero algo,Entero asd, flotante cosas){    
-    Escribir("EstoEsUnProcedimiento");
+Pros procedimiento (Entero algo,Entero asd){    
+    Escribir("Prueba de procedimiento");
     Entero entero = algo + asd;
-Entero asd2 = 555;
-    Escribir("LaSumaDeLosDosEnteroEs");
-    Escribir(entero);       
+    Entero asd2 = 555;
+    Escribir("La Suma De Los Dos Entero Es");
+    Escribir(entero);
+    Escribir("Fin del procedimiento");       
 }
 
 Pros suma (flotante cosas){    
-    Escribir("EstoEsUnProcedimiento");
-    Entero entero = 55 + 22;
-    Escribir("LaSumaDeLosDosEnteroEs");
-    Escribir(entero);
-    
+    Escribir("Procedimeinto con suma de flotantes");
+    flotante decimal = 55.2 + cosas;
+    Escribir("La suma de decimales es ");
+    Escribir(decimal);
+}
+Fun Texto stringSalida(Texto a, Texto b){
+    Texto algo;
+    algo = a + b;
+    Escribir(algo);
+    RETORNAR algo;
+}
+
+Pros Ciclos(){
+    Escribir("Esto es una prueba con ciclos");
+    Entero entero = 22;
+    Escribir("Ciclo for \n");
+    para(1,6){
+        Escribir("Aumento");
+        entero = entero+1;
+        Escribir(entero);
+    }
+
+    Entero cosas = 5;
+    Escribir("Ciclo mientras");
+    mientras(cosas >1){
+        Escribir("Se mantiene el ciclo mientras");
+        cosas = cosas -1;
+        Escribir(cosas);
+    }
+}
+Pros saludo(){
+    Escribir("Hola mucho gusto");
+}
+Pros saludoNombre(Texto nombre, Texto apellidos){
+    Texto nuevo;
+    nuevo = nombre+apellidos;
+    Escribir("Hola mucho gusto");
+    Escribir(nuevo);
 }
 main{    
-    Escribir("EstoEsUnaPruebaMain");
+    Escribir("Esto es la prueba de un programa en este lenguaje");
     Entero entero = 1;
     Entero entero2 = 5+5;
     flotante decimal = 222.5;
-    Pros procedimiento(entero,entero2,decimal);
+    Pros procedimiento(entero,entero2);
     Pros suma(decimal);
+    Texto algo1 = "Hola";
+    Texto algo2 = "Mundo";
+    Texto salida = Fun stringSalida(algo1,algo2);
+    Escribir("La nueva salida es:");
+    Escribir(salida);
+    Pros Ciclos();
+    Escribir("Esto es la prueba de un cambio");
+    Entero nuevo = Fun metodo(entero);
+    cambio(nuevo){
+
+        caso 18:
+            Escribir("La entrada es 18");
+            parar
+        caso 20:
+            Escribir("La entrada es 20");
+            parar
+        caso 23:
+            Escribir("LA entrdad es 23 y hara un proceimineto de saludo");
+            Pros saludo();
+            parar
+    }
+
+    Escribir("Probaremos la lectura para saludar con un procedimiento");
+    Texto nombre;
+    Texto Apellidos;
+
+    Leer(nombre);
+    Leer(Apellidos);
+    Pros saludoNombre(nombre,Apellidos);
 }

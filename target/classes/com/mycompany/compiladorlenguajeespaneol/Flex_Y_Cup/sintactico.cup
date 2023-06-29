@@ -344,7 +344,7 @@ tipo    ::= ENTERO:a  {:RESULT = type(a.toString());:}
         ;
 /*                      Escribir
 ---------------------------------------------------------------------*/
-escribir    ::= ESCRIBIR PARENTESISABIERTO COMILLAS ID:a COMILLAS PARENTESISCERRADO PUNTOYCOMA{:RESULT = "System.out.println("+"\""+a.toString()+"\""+");";:}
+escribir    ::= ESCRIBIR PARENTESISABIERTO  COMILLASTEXTO:a  PARENTESISCERRADO PUNTOYCOMA{:RESULT = "System.out.println("+a.toString()+");";:}
             |   ESCRIBIR PARENTESISABIERTO  ID:a  PARENTESISCERRADO PUNTOYCOMA{:    if(existeVar(a.toString(),vars)){
                                                                                         RESULT = "System.out.println("+a.toString()+");";
                                                                                     }else{
@@ -372,8 +372,8 @@ asig1   ::= tipo:a ID:b IGUAL{:if(existeVar(b.toString(),vars)){
         ;
 asig2   ::=     ID:a IGUAL {:RESULT = a.toString();:}
         ;
-asig    ::=     asig2:a COMILLAS ID:b COMILLAS PUNTOYCOMA {:    if(existeVar(a.toString(),vars)){
-                                                                    RESULT = a.toString()+" = "+"\""+b.toString()+"\""+";\n";}
+asig    ::=     asig2:a  COMILLASTEXTO:b  PUNTOYCOMA {:    if(existeVar(a.toString(),vars)){
+                                                                    RESULT = a.toString()+" = "+b.toString()+";\n";}
                                                                 else{
                                                                     RESULT = "";
                                                                     banderaError = true;
@@ -437,7 +437,7 @@ asig    ::=     asig2:a COMILLAS ID:b COMILLAS PUNTOYCOMA {:    if(existeVar(a.t
                                                                     error();
                                                                     }
                                                             }:} 
-        |       tipo:a ID:b IGUAL ID:c PUNTOYCOMA {:    if(existeVar(b.toString(),vars)){
+        |       tipo:a ID:b IGUAL COMILLASTEXTO:c PUNTOYCOMA {:    if(existeVar(b.toString(),vars)){
                                                                 banderaError  = true;
                                                                 RESULT = "";
                                                                 erroSalida.add(new ErrorSalida(bleft,bright,"La variable: "+b.toString()+" ya existe"));
@@ -533,16 +533,16 @@ casos   ::=     casos:a CASO tipoEntrada:b DOSPUNTOS ciclo:c PARAR {:RESULT = a.
         |       CASO tipoEntrada:a DOSPUNTOS  ciclo:b PARAR {:RESULT = "case "+ a.toString()+":\n"+b.toString()+"\nbreak;\n";:}
         ;
 
-tipoEntrada ::= COMILLAS ID:a COMILLAS {:RESULT = "\""+a.toString()+"\""; :}
+tipoEntrada ::=  COMILLASTEXTO:a  {:RESULT = "\""+a.toString()+"\""; :}
             |   numero:a {:RESULT = a.toString();:}
-            |   ID:a {:if(existeVar(a.toString(),vars)){
-                RESULT = a.toString();
-                }else{
-                    banderaError = true;
-                    RESULT = "";
-                    erroSalida.add(new ErrorSalida(aleft,aright,"La variable: "+a.toString()+" no existe"));
-                    error();
-                }:}
+            |   ID:a {: if(existeVar(a.toString(),vars)){
+                            RESULT = a.toString();
+                        }else{
+                            banderaError = true;
+                            RESULT = "";
+                            erroSalida.add(new ErrorSalida(aleft,aright,"La variable: "+a.toString()+" no existe"));
+                            error();
+                        }:}
             ;
 
 /*                      Mientras
