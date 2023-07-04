@@ -1,6 +1,18 @@
 Fun Entero metodo (Entero asd){
     Escribir("Esto es una prueba de una funcion");    
     Entero nuevo = asd +22;
+    Si(nuevo > 22){
+        Escribir("Entra al if");
+        Si(80 < 10){
+            Escribir("80 es menor entra al if anidado");
+        }
+        Sino{
+            Escribir("80 es mayor a 10");
+        }
+    }
+    Sino{
+        Escribir("no entra al if xD");
+    }
     Escribir("El resultado de la suma es:");
     Escribir(nuevo);
     RETORNAR nuevo;
